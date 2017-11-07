@@ -1,14 +1,16 @@
 function SearchPido()
 {
-	
-
 	$("#return_result").html('<br><img src="../images/loading_3.gif" width="48px" height="48px"/><br><b>Calculando previs&atilde;o de paletes</b>').text();
 	$.post('viewFormReturn.php',
         {
             op:        $("#txt_search_order").val(),
          
         },function(data){
-        	setTimeout(function(){$("#return_result").html(data)}, 3000);
+        	setTimeout(function(){
+        							$("#search-order").hide();
+        							$("#return_result").html(data);
+        						    
+        						 }, 3000);
                         }
          
          )   

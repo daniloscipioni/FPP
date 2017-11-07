@@ -50,13 +50,15 @@ require '../br.schott.com.util/Util.php';
 
 </head>
 <body>
-
+<div align="left">
+<button>Voltar</button>  
+</div>	
+<br>
 	<div>
-  
+
     <?php if($conn->getErrorMessage()!=1){?>
     
         <table border="1" width="70%" align="center" class="list issue-report">
-			
 			<tr>
 				<td colspan="2" align="left"><b>Cliente </b></td>
 				<td colspan="8" align="left"><?php echo (int)$conn->getCodeCustomer()." - ".$conn->getCustomer()?></td>

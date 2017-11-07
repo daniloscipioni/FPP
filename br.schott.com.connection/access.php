@@ -64,23 +64,32 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
     private $minutesleep;
     private $machine;
     private $ready;
+    private $maxPieces;
+    private $prodPieces;
+    private $completePalete;
     
     
     private $notReleasedOrderNo;
     private $notReleasedPalletNo;
     private $notReleasedMachine;
     private $notReleasedReady;
+    private $notReleasedMaxPieces;
+    private $notReleasedProdPieces;
     private $notReleasedCodMaterial;
     private $notReleasedDescMaterial;
     private $notReleasedQuantity;
+    private $notReleasedCompletePalete;
     
     
     private $AuxiliarNotReleasedOrderNo;
     private $AuxiliarNotReleasedPalletNo;
     private $AuxiliarNotReleasedMachine;
     private $AuxiliarNotReleasedReady;
+    private $AuxiliarNotReleasedMaxPieces;
+    private $AuxiliarNotReleasedProdPieces;
     private $AuxiliarNotReleasedCodMaterial;
     private $AuxiliarnotReleasedDescMaterial;
+    private $AuxiliarnotReleasedCompletePalete;
     
     
     /* Declaração das variaveis de vetor - vetor de paletes aprovados e não aprovados */
@@ -89,6 +98,67 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
     
     
     
+    
+    
+    
+    
+    
+    /**
+     * @return the $completePalete
+     */
+    public function getCompletePalete()
+    {
+        return $this->completePalete;
+    }
+
+    /**
+     * @return the $notReleasedCompletePalete
+     */
+    public function getNotReleasedCompletePalete()
+    {
+        return $this->notReleasedCompletePalete;
+    }
+
+    /**
+     * @return the $AuxiliarnotReleasedCompletePalete
+     */
+    public function getAuxiliarnotReleasedCompletePalete()
+    {
+        return $this->AuxiliarnotReleasedCompletePalete;
+    }
+
+    /**
+     * @return the $notReleasedMaxPieces
+     */
+    public function getNotReleasedMaxPieces()
+    {
+        return $this->notReleasedMaxPieces;
+    }
+
+    /**
+     * @return the $notReleasedProdPieces
+     */
+    public function getNotReleasedProdPieces()
+    {
+        return $this->notReleasedProdPieces;
+    }
+
+    /**
+     * @return the $AuxiliarNotReleasedMaxPieces
+     */
+    public function getAuxiliarNotReleasedMaxPieces()
+    {
+        return $this->AuxiliarNotReleasedMaxPieces;
+    }
+
+    /**
+     * @return the $AuxiliarNotReleasedProdPieces
+     */
+    public function getAuxiliarNotReleasedProdPieces()
+    {
+        return $this->AuxiliarNotReleasedProdPieces;
+    }
+
     /**
      * @return the $ready
      */
@@ -490,8 +560,8 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
               $this->notReleasedMachine[] = $machine['MACHINE'];
           }
           
-          foreach ($records as $machine){
-              $this->notReleasedReady[] = $machine['READY'];
+          foreach ($records as $ready){
+              $this->notReleasedReady[] = $ready['READY'];
           }
         
           foreach ($records as $order){
@@ -504,6 +574,18 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
         
           foreach ($records as $descMaterial){
             $this->notReleasedDescMaterial[] = $descMaterial['DESC_MATERIAL'];
+          }
+          
+          foreach ($records as $maxPieces){
+              $this->notReleasedMaxPieces[] = $maxPieces['MAX_PIECES'];
+          }
+          
+          foreach ($records as $prodPieces){
+              $this->notReleasedProdPieces[] = $prodPieces['PROD_PIECES'];
+          }
+          
+          foreach ($records as $completePalete){
+              $this->notReleasedCompletePalete[] = $completePalete['COMPLETE_PALETE'];
           }
          
 
@@ -522,7 +604,9 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
               $noReleasedReady[] = trim($this->notReleasedReady[$i]);
               $noReleasedCodMaterial[] = trim($this->notReleasedCodMaterial[$i]);
               $noReleasedDescMaterial[] = trim($this->notReleasedDescMaterial[$i]);
-              
+              $noReleasedMaxPieces[] = trim($this->notReleasedMaxPieces[$i]);
+              $noReleasedProdPieces[] = trim($this->notReleasedProdPieces[$i]);
+              $noReleasedCompletePalete[] = trim($this->notReleasedCompletePalete[$i]);             
           }   
     
           /* Diferença entre vetores de paletes não liberados(do PIDO) e paletes liberados(do BD POSTGRES) */
@@ -541,7 +625,9 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
                       $this->AuxiliarNotReleasedReady[] = $noReleasedReady[$i];
                       $this->AuxiliarNotReleasedCodMaterial[] = $noReleasedCodMaterial[$i];
                       $this->AuxiliarnotReleasedDescMaterial[] = $noReleasedDescMaterial[$i];
-                                           
+                      $this->AuxiliarNotReleasedMaxPieces[] = $noReleasedMaxPieces[$i];
+                      $this->AuxiliarNotReleasedProdPieces[] = $noReleasedProdPieces[$i];
+                      $this->AuxiliarnotReleasedCompletePalete[] = $noReleasedCompletePalete[$i];
                   }
               }
              

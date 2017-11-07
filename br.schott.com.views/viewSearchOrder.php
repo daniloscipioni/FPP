@@ -110,28 +110,24 @@ if (!isset($_SESSION['id_user'])) {
 <h2>Ficha de Produto em Processo</h2>
 
 
-<div class="splitcontentleft">
-
-<div id="login-form">
-        
-        
-  <form  id="formSearch" method="post" target="_blank">
-      
-      <label for="order">Ordem de Produção</label>
-      <input type="text" name="txt_search_order" id="txt_search_order" tabindex="1" autofocus="autofocus" maxlength="10">
-      
-      
-     
-      <input type="submit" name="btn_search_order" value="Buscar &#187;" onclick="SearchPido();" tabindex="1" id="btn_search_order">
-  </form>
-</div>
-
+<!-- <div class="splitcontentleft">-->
+<div id="search-order"> 
+            <div id="login-form"> 
+               <form  id="formSearch" method="post" target="_blank">
+                  <label for="order">Ordem de Produção</label>
+                  <input type="text" name="txt_search_order" id="txt_search_order" tabindex="1" autofocus="autofocus" maxlength="10">
+                  <input type="submit" name="btn_search_order" value="Buscar &#187;" onclick="SearchPido();" tabindex="1" id="btn_search_order">
+               </form>
+         	</div> 
+</div> 
   
-</div>
+<!-- </div>
 
-<div class="splitcontentright">
-    <div id="return_result" align="center" valign="center"><img alt="" src="../Images/emptydoc.png"></div>
-</div>
+<div class="splitcontentright"> -->
+    <div id="return_result" align="center" valign="center">
+
+    </div>
+<!-- </div> -->
 
 
 

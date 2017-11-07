@@ -58,25 +58,39 @@ $connPallet->SearchNotReleased();
 		&nbsp;
 		<table border="1" width="70%" align="center" class="list issue-report">
 		    <thead>
-			<th colspan="5">Paletes Não liberados</th>
+			<th colspan="6">Paletes Não liberados</th>
 			</thead>
 			<thead>
 				<th>Máquina</th>
 				<th>Número Palete</th>
 				<th>Cód Produto</th>
 				<th>Descrição</th>
-				<th>%</th>
+				<!-- <th>%</th> -->
+				<th>Total no Palete</th>
+				<th>Peças Produzidas</th>
+				
 			</thead>
 
 
-<?php  for($i=0; $i<= $connPallet->getNotReleasedQuantity()-1; $i++){	?>	
-
+<?php  for($i=0; $i<= $connPallet->getNotReleasedQuantity()-1; $i++){	
+       		
+    if($connPallet->getAuxiliarnotReleasedCompletePalete()[$i]){
+        			        $cor = "#FAEAA1";
+        			    }else{
+        			        $cor = "#FFFFFF";
+        			    }
+    			 ?>
 			<tr>
-				<td width="20%" align="center"><?php echo $connPallet->getAuxiliarNotReleasedMachine()[$i];?></td>
-				<td width="20%" align="center"><?php echo $connPallet->getAuxiliarNotReleasedPalletNo()[$i];?></td>
-				<td width="10%" align="center"><?php echo $connPallet->getAuxiliarNotReleasedCodMaterial()[$i];?></td>
-				<td width="50%" align="center"><?php echo $connPallet->getAuxiliarnotReleasedDescMaterial()[$i];?></td>
-				<td width="10%" align="center"><?php echo $connPallet->getAuxiliarNotReleasedReady()[$i] . " %";?></td>
+			    <td bgcolor=<?php echo $cor?> width="20%" align="center"><?php echo $connPallet->getAuxiliarNotReleasedMachine()[$i];?></td>
+				<td bgcolor=<?php echo $cor?> width="20%" align="center"><?php echo $connPallet->getAuxiliarNotReleasedPalletNo()[$i];?></td>
+				<td bgcolor=<?php echo $cor?> width="10%" align="center"><?php echo $connPallet->getAuxiliarNotReleasedCodMaterial()[$i];?></td>
+				<td bgcolor=<?php echo $cor?> width="50%" align="center"><?php echo $connPallet->getAuxiliarnotReleasedDescMaterial()[$i];?></td>
+				
+				<!-- <td width="10%" align="center"><//?php echo $connPallet->getAuxiliarNotReleasedReady()[$i] . " %";?></td> -->
+				
+				<td bgcolor=<?php echo $cor?> width="10%" align="center"><?php echo str_replace(',','.',number_format($connPallet->getAuxiliarNotReleasedMaxPieces()[$i])) ;?></td>
+				<td bgcolor=<?php echo $cor?> width="10%" align="center"><?php echo str_replace(',','.',number_format($connPallet->getAuxiliarNotReleasedProdPieces()[$i]));?></td>
+			
 			</tr>
 		<?php }?>
 		</table>
