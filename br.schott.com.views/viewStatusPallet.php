@@ -8,21 +8,26 @@ if (!isset($_SESSION['id_user'])) {
 } 
 
 ?>
-<html lang="pt-BR"><head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>FPP - SCHOTT</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <meta name="description" content="Redmine">
 <meta name="keywords" content="issue,bug,tracker">
 <meta name="csrf-param" content="authenticity_token">
-<meta name="csrf-token" content="Znbi4LxpAcfm5mHalpquSwXp1agUX8MSeIsef1UjOPFjCLQ0DCWRwlZJhIi0JztUXPrPmQGJg8/JmxSwgNOMng==">
-<link rel="shortcut icon" href="../Images/fpp.png?1500229109">
+<meta name="csrf-token" content="BWtd3OPvQzwhjTPErwLxHzeDH8SyM9PvSmXTNhVdaKAYygJ3VdE7EnOraA45QqU5qsDZHAWcSnu1W2QKz1+CQw==">
+<link rel="shortcut icon" href="Images/fpp.png">
 <link rel="stylesheet" media="all" href="../css/stylesheets/jquery/jquery-ui-1.11.0.css?1500229109">
 <link rel="stylesheet" media="all" href="../css/themes/schott/stylesheets/application.css?1412685099">
 <link rel="stylesheet" media="all" href="../css/stylesheets/responsive.css?1500229109">
 <script src="../js/javascripts/jquery-1.11.1-ui-1.11.0-ujs-3.1.4.js?1500229109"></script>
 <script src="../js/javascripts/application.js?1500229109"></script>
 <script src="../js/javascripts/responsive.js?1500229109"></script>
+<script src="../js/javascripts/theme.js?1351450256"></script>
+<script src="../js/plugin_assets/redmine_checklists/javascripts/checklists.js?1500665867"></script>
 </head>
 <body class="theme-Schott controller-welcome action-index">
 

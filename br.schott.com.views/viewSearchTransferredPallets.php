@@ -54,6 +54,7 @@ $connPallet->SearchTransferred();
 			<thead>
 			<th colspan="6">Paletes tranferidos</th>
 			</thead>
+			
 			<thead>
 				<th>Data</th>
 				<th>Hora</th>
@@ -71,7 +72,6 @@ $connPallet->SearchTransferred();
 				<td width="20%" align="center"><?php echo $connPallet->getPallet_no()[$i] ?></td>
 				<td width="10%" align="center"><?php echo $connPallet->getProd_sap()[$i] ?></td>
 				<td width="50%" align="center"><?php echo $connPallet->getDesc_prod_sap()[$i] ?></td>
-				
 			</tr>
 			<?php }?>
 		</table>

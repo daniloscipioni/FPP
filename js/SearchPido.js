@@ -1,7 +1,8 @@
 function SearchPido()
 {
+	
 
-	$("#return_result").html('<br><img src="../images/loading_3.gif" width="48px" height="48px"/><br><b>Calculando previsão de paletes</b>').text();
+	$("#return_result").html('<br><img src="../images/loading_3.gif" width="48px" height="48px"/><br><b>Calculando previs&atilde;o de paletes</b>').text();
 	$.post('viewFormReturn.php',
         {
             op:        $("#txt_search_order").val(),
@@ -42,7 +43,7 @@ function SearchTransferredPallets()
 
 function SearchNotReleasedPallets()
 {
-	var msg = "Buscando Paletes Não Liberados";
+	var msg = "Buscando Paletes N&atilde;o Liberados";
 	$("#return_result").html('<br><img src="../Images/loading_3.gif" width="48px" height="48px"/><br><b>'+msg+'</b>').text();
 	$.post('viewSearchNotReleasedPallets.php',
         {},function(data){
@@ -89,7 +90,6 @@ function SaveDataReleaseadPallet(order,machine,material,materialDesc,quantity,pa
 
 }
 
-
 function MarkField(index)
 {
 
@@ -99,8 +99,8 @@ function MarkField(index)
 
 function MarkPallet(palletSelected)
 {
-
-	var palletNo = prompt("Insira o número do palete", "");
+	
+	var palletNo = prompt(decodeURIComponent("Insira o n\u00FAmero do palete"), "");
 		if(palletNo == palletSelected){	
 			$.post('../br.schott.com.util/UpdateDataTransferredPallet.php', {
 				pallet: palletNo,

@@ -1,4 +1,5 @@
 <?php
+ header("Content-type: text/html; charset=utf-8"); 
 //session_start();
 date_default_timezone_set("America/Sao_Paulo");
 setlocale(LC_ALL, 'pt_BR');
@@ -12,36 +13,28 @@ $connPallet = new Access_ReleasedPallets();
 $connPallet->SearchReleased();
 
 ?>
-<html>
+<html lang="en">
 <head>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<link href="bootstrap/bootstrap-3.3.7-dist/css/bootstrap.min.css"
-	rel="stylesheet" type="text/css" />
-<title>Emissão de FPP - Schott</title>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>FPP - SCHOTT</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="description" content="Redmine">
+<meta name="keywords" content="issue,bug,tracker">
+<meta name="csrf-param" content="authenticity_token">
+<meta name="csrf-token" content="BWtd3OPvQzwhjTPErwLxHzeDH8SyM9PvSmXTNhVdaKAYygJ3VdE7EnOraA45QqU5qsDZHAWcSnu1W2QKz1+CQw==">
+<link rel="shortcut icon" href="Images/fpp.png">
+<link rel="stylesheet" media="all" href="../css/stylesheets/jquery/jquery-ui-1.11.0.css?1500229109">
+<link rel="stylesheet" media="all" href="../css/themes/schott/stylesheets/application.css?1412685099">
 
-<link rel="stylesheet" media="all"
-	href="css/stylesheets/jquery/jquery-ui-1.11.0.css" />
-<link rel="stylesheet" media="all"
-	href="css/themes/schott/stylesheets/application.css" />
-<link href="css/stylesheets/responsive.css" rel="stylesheet"
-	type="text/css" />
-<link rel="stylesheet" media="screen"
-	href="css/plugin_assets/redmine_agile/stylesheets/redmine_agile.css" />
-<link rel="stylesheet" media="screen"
-	href="/redmine/plugin_assets/redmine_checklists/stylesheets/checklists.css" />
-<link
-	href="css/plugin_assets/redmine_checklists/stylesheets/checklists.css"
-	rel="stylesheet" type="text/css" />
-<script
-	src="css/plugin_assets/redmine_checklists/javascripts/checklists.js"
-	type="text/javascript"></script>
+<link rel="stylesheet" media="all" href="../css/stylesheets/responsive.css?1500229109">
 
-<script src="js/javascripts/jquery-1.11.1-ui-1.11.0-ujs-3.1.4.js"
-	charset="utf-8"></script>
-<script src="js/javascripts/application.js" charset="utf-8"></script>
-<script src="js/javascripts/responsive.js"></script>
-<script src="css/themes/schott/javascripts/theme.js"></script>
-
+<script src="../js/javascripts/jquery-1.11.1-ui-1.11.0-ujs-3.1.4.js?1500229109"></script>
+<script src="../js/javascripts/application.js?1500229109"></script>
+<script src="../js/javascripts/responsive.js?1500229109"></script>
+<script src="../js/javascripts/theme.js?1351450256"></script>
+<script src="../js/plugin_assets/redmine_checklists/javascripts/checklists.js?1500665867"></script>
 
 </head>
 <body>

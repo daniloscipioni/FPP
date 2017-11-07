@@ -39,7 +39,6 @@ require '../br.schott.com.util/Util.php';
 <link rel="shortcut icon" href="../Images/fpp.png">
 <link rel="stylesheet" media="all" href="../css/stylesheets/jquery/jquery-ui-1.11.0.css?1500229109">
 <link rel="stylesheet" media="all" href="../css/themes/schott/stylesheets/application.css?1412685099">
-
 <link rel="stylesheet" media="all" href="../css/stylesheets/responsive.css?1500229109">
 
 <script src="../js/javascripts/jquery-1.11.1-ui-1.11.0-ujs-3.1.4.js?1500229109"></script>
