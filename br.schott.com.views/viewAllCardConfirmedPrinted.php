@@ -7,7 +7,7 @@ setlocale(LC_ALL, 'pt_BR');
 
 use Connection\Connection;
 use Util\Util;
-
+//
 require '../br.schott.com.config/configBarcode.php';
 require '../br.schott.com.connection/connection.php';
 require '../br.schott.com.util/Util.php';
