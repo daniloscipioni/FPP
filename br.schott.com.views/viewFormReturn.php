@@ -312,7 +312,7 @@ echo $conn->getOrderNo() . str_pad($i, 6, "0", STR_PAD_LEFT);
 				
 
 					<td align="center" colspan="4">
-			<form action="br.schott.com.views/viewAllCardPredictedPrinted.php?op=<?php echo $conn->getOrderNo()?>" method="post" target="_blank" >
+			<form action="../br.schott.com.views/viewAllCardPredictedPrinted.php?op=<?php echo $conn->getOrderNo()?>" method="post" target="_blank" >
 					<input type="hidden" id="idnumPalete"    name="nmnumPalete" value="<?php echo $numPalete;?>">
 					<input type="hidden" id="idqtdeCx"       name="nmqtdeCx" value="<?php echo $qtdeCaixa;?>">
 					<input type="hidden" id="idqtdeCmd"      name="nmqtdeCmd" value="<?php echo $qtdeCamadas;?>">
@@ -377,7 +377,7 @@ echo $conn->getOrderNo() . str_pad($i, 6, "0", STR_PAD_LEFT);
  <!--   					href="br.schott.com.views/viewCardConfirmedPrinted.php?op=<//?php// echo $conn->getOrderNo()?>&pallet_no=<//?php// echo $conn->getConfirmedNoPallet()[$i]?>&unity=<//?php// echo $conn->getLineNumber()[$i]?>"
 <!--     					target="_blank">imprimir ficha</a> -->
 				
-				<form id="form_paletes_bipados" name="form_paletes_bipados" action="br.schott.com.views/viewCardConfirmedPrinted.php?op=<?php echo $conn->getOrderNo()?>&pallet_no=<?php echo $conn->getConfirmedNoPallet()[$i]?>&unity=<?php echo $conn->getLineNumber()[$i]?>" method="post" target="_blank" >
+				<form id="form_paletes_bipados" name="form_paletes_bipados" action="../br.schott.com.views/viewCardConfirmedPrinted.php?op=<?php echo $conn->getOrderNo()?>&pallet_no=<?php echo $conn->getConfirmedNoPallet()[$i]?>&unity=<?php echo $conn->getLineNumber()[$i]?>" method="post" target="_blank" >
 					
 
 					<input type="hidden" id="idcustomer"     name="nmcustomer" value="<?php echo (int)$conn->getCodeCustomer()." - ".$conn->getCustomer();?>">
