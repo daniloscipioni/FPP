@@ -22,7 +22,13 @@ if($validation->num_rows == 1)
      $_SESSION['fpp_desc_permission']  =  $validation->fpp_desc_permission[1];
     
     
-    header("Location: ../br.schott.com.views/viewSearchOrder.php");
+     if($_SESSION['nm_setor']  == "Inbound & int. log.")
+     {
+         header("Location: ../br.schott.com.views/viewStatusPallet.php");
+     }else{
+         header("Location: ../br.schott.com.views/viewSearchOrder.php");
+     }
+    
     die();
 
 }else{

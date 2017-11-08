@@ -52,7 +52,7 @@ $connPallet->SearchTransferred();
 		&nbsp;
 		<table border="1" width="70%" align="center" class="list issue-report">
 			<thead>
-			<th colspan="6">Paletes tranferidos</th>
+			<th colspan="7">Paletes transferidos</th>
 			</thead>
 			
 			<thead>
@@ -62,6 +62,7 @@ $connPallet->SearchTransferred();
 				<th>Número Palete</th>
 				<th>Cód Produto</th>
 				<th>Descrição</th>
+				<th>Tranferido por</th>
 			</thead>
 		
 			<?php for ($i=1; $i<=$connPallet->num_rows;$i++){?>
@@ -72,6 +73,7 @@ $connPallet->SearchTransferred();
 				<td width="20%" align="center"><?php echo $connPallet->getPallet_no()[$i] ?></td>
 				<td width="10%" align="center"><?php echo $connPallet->getProd_sap()[$i] ?></td>
 				<td width="50%" align="center"><?php echo $connPallet->getDesc_prod_sap()[$i] ?></td>
+				<td width="50%" align="center"><?php echo $connPallet->getTransfResp()[$i] ?></td>
 			</tr>
 			<?php }?>
 		</table>

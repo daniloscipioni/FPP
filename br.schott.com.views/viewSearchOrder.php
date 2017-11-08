@@ -7,6 +7,17 @@ if (!isset($_SESSION['id_user'])) {
     die();
 } 
 
+if( $_SESSION['nm_setor'] == 'Quality management'){
+    $tabName = "Liberação Qualidade";
+}elseif ($_SESSION['nm_setor'] == 'Production planning')
+{
+    $tabName = "Impressão PCP";
+}elseif ($_SESSION['nm_setor'] == 'Production overhead')
+{
+    $tabName = "Impressão ADM";
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -36,29 +47,6 @@ if (!isset($_SESSION['id_user'])) {
 
 <div id="wrapper">
 
-<div class="flyout-menu js-flyout-menu">
-
-
-        <div class="flyout-menu__search">
-                   </div>
-
-        <div class="flyout-menu__avatar ">
-                <a href="/redmine/users/178"><img alt="" title="" class="gravatar" srcset="//www.gravatar.com/avatar/101d6848b38d6ed6f619e9c1914f4cbb?rating=PG&amp;size=160&amp;default=mm 2x" src="//www.gravatar.com/avatar/101d6848b38d6ed6f619e9c1914f4cbb?rating=PG&amp;size=80&amp;default=mm"></a>
-            <a class="user active" href="/redmine/users/178">daniloscipioni</a>
-        </div>
-
-        <h3>Projeto</h3>
-        <span class="js-project-menu"></span>
-
-    <h3>Geral</h3>
-    <span class="js-general-menu"></span>
-
-    <span class="js-sidebar flyout-menu__sidebar"></span>
-
-    <h3>Perfil</h3>
-    <span class="js-profile-menu"></span>
-
-</div>
 
 <!-- <div id="wrapper2"> -->
 <!-- <div id="wrapper3"> -->
@@ -72,6 +60,7 @@ if (!isset($_SESSION['id_user'])) {
 					
 					<li><b> Cracha:  <?php echo $_SESSION['cd_user']?></b>&nbsp;&nbsp;</li>
 					<li><b> Nome:   <?php echo $_SESSION['nm_user']?></b>&nbsp;&nbsp;</li>
+					 <li><b> Setor:   <?php echo $_SESSION['nm_setor']?></b>&nbsp;&nbsp;</li>
 					<li><span class="glyphicon glyphicon-lock"></span>&nbsp;<b><?php echo $_SESSION['fpp_desc_permission']?></b>&nbsp;&nbsp;</li>
 					<li><a class="register" href="../br.schott.com.auth/auth-logout.php"> Sair <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></a></li>
 				</ul>
@@ -91,7 +80,7 @@ if (!isset($_SESSION['id_user'])) {
 
     <ul>
 
-	<li><a class="overview selected" href="#">Ficha de Produto em Processo</a></li>
+	<li><a class="overview selected" href="#"><?php echo $tabName?></a></li>
 	<li><a class="issues" href="viewStatusPallet.php">Status</a></li>
 	</ul>
 </div>

@@ -51,7 +51,7 @@ require '../br.schott.com.util/Util.php';
 </head>
 <body>
 <div align="left">
-<button>Voltar</button>  
+<button onclick="location.reload();">&#171; Voltar</button>  
 </div>	
 <br>
 	<div>
@@ -335,7 +335,7 @@ echo $conn->getOrderNo() . str_pad($i, 6, "0", STR_PAD_LEFT);
 
 			<!--		<a href="br.schott.com.views/viewAllCardPredictedPrinted.php?op=<?php //echo $conn->getOrderNo()?>" target="_blank">
 			  		Imprimir Todas</a>-->
-			<input type="submit" value="Imprimir" >
+					<input type="submit" value="Imprimir" >
 			</form>
 					</td>
 			</tr>
@@ -349,7 +349,7 @@ echo $conn->getOrderNo() . str_pad($i, 6, "0", STR_PAD_LEFT);
 
 		&nbsp;
 
-<?php if(  trim($_SESSION['nm_setor']) == 'Runner pers. amp.' || trim($_SESSION['nm_setor']) == 'Runner pers. via.'||trim($_SESSION['nm_setor']) == 'Runner pers. CA'||trim($_SESSION['nm_setor']) == 'Production overhead'){?>
+<?php if(  trim($_SESSION['nm_setor']) == 'Quality management' || trim($_SESSION['nm_setor']) == 'Production overhead'){?>
 		<table border="1" width="70%" align="center" class="list issue-report">
 
 			<tr>

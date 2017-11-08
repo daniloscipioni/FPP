@@ -67,6 +67,8 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
     private $maxPieces;
     private $prodPieces;
     private $completePalete;
+    private $releasedResp;
+    private $transfResp;
     
     
     private $notReleasedOrderNo;
@@ -102,7 +104,23 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
     
     
     
+    /**
+     * @return the $transfResp
+     */
+    public function getTransfResp()
+    {
+        return $this->transfResp;
+    }
+
     
+     /**
+     * @return the $releasedResp
+     */
+    public function getReleasedResp()
+    {
+        return $this->releasedResp;
+    }
+
     /**
      * @return the $completePalete
      */
@@ -418,7 +436,7 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
     
     function UpdateTranferredPallet($pallet)
     {
-        $sql = "UPDATE data.tbl_fpp_released_pallets SET pallet_removed = true where pallet_no = '$pallet';";
+        $sql = "UPDATE data.tbl_fpp_released_pallets SET pallet_removed = true,transf_resp = '$_SESSION[cd_user]' where pallet_no = '$pallet';";
         
         
         $conn = new Connect_ReleasedPallets();
@@ -461,7 +479,8 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
                        machine, 
                        prod_sap, 
                        desc_prod_sap, 
-                       qty_pieces_palete, 
+                       qty_pieces_palete,
+                       released_resp, 
                        TO_CHAR(current_timestamp - emission_date , 'HH24h MIm SSs') timesleep,
                        TO_CHAR(current_timestamp - emission_date , 'HH24') hoursleep ,
                        TO_CHAR(current_timestamp - emission_date , 'MI') minutesleep  
@@ -488,6 +507,7 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
             $this->timesleep[$i] = $row['timesleep'];
             $this->hoursleep[$i] = $row['hoursleep'];
             $this->minutesleep[$i] = $row['minutesleep'];
+            $this->releasedResp[$i] = $row['released_resp'];
             $i ++;
             
         }
@@ -497,7 +517,13 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
     
     function SearchTransferred()
     {
-        $sql = "SELECT emission_date, machine, pallet_no , prod_sap, desc_prod_sap FROM data.tbl_fpp_released_pallets WHERE pallet_removed is true ORDER BY emission_date DESC";
+        $sql = "SELECT emission_date, 
+                       machine, 
+                       pallet_no, 
+                       prod_sap, 
+                       desc_prod_sap,
+                       transf_resp 
+                FROM data.tbl_fpp_released_pallets WHERE pallet_removed is true ORDER BY emission_date DESC";
         
         
         $conn = new Connect_ReleasedPallets();
@@ -516,6 +542,7 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
             $this->machine[$i] = $row['machine'];
             $this->prod_sap[$i] = $row['prod_sap'];
             $this->desc_prod_sap[$i] = $row['desc_prod_sap'];
+            $this->transfResp[$i] = $row['transf_resp'];
             $i ++;
             
         }

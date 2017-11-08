@@ -7,6 +7,16 @@ if (!isset($_SESSION['id_user'])) {
     die();
 } 
 
+if( $_SESSION['nm_setor'] == 'Quality management'){
+    $tabName = "Liberação Qualidade";
+}elseif ($_SESSION['nm_setor'] == 'Production planning')
+{
+    $tabName = "Impressão PCP";
+}elseif ($_SESSION['nm_setor'] == 'Production overhead')
+{
+    $tabName = "Impressão ADM";
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,38 +34,17 @@ if (!isset($_SESSION['id_user'])) {
 <link rel="stylesheet" media="all" href="../css/themes/schott/stylesheets/application.css?1412685099">
 <link rel="stylesheet" media="all" href="../css/stylesheets/responsive.css?1500229109">
 <script src="../js/javascripts/jquery-1.11.1-ui-1.11.0-ujs-3.1.4.js?1500229109"></script>
+
 <script src="../js/javascripts/application.js?1500229109"></script>
 <script src="../js/javascripts/responsive.js?1500229109"></script>
 <script src="../js/javascripts/theme.js?1351450256"></script>
+
 <script src="../js/plugin_assets/redmine_checklists/javascripts/checklists.js?1500665867"></script>
 </head>
 <body class="theme-Schott controller-welcome action-index">
 
 <div id="wrapper">
 
-<div class="flyout-menu js-flyout-menu">
-
-
-        <div class="flyout-menu__search">
-                   </div>
-
-        <div class="flyout-menu__avatar ">
-                <a href="/redmine/users/178"><img alt="" title="" class="gravatar" srcset="//www.gravatar.com/avatar/101d6848b38d6ed6f619e9c1914f4cbb?rating=PG&amp;size=160&amp;default=mm 2x" src="//www.gravatar.com/avatar/101d6848b38d6ed6f619e9c1914f4cbb?rating=PG&amp;size=80&amp;default=mm"></a>
-            <a class="user active" href="/redmine/users/178">daniloscipioni</a>
-        </div>
-
-        <h3>Projeto</h3>
-        <span class="js-project-menu"></span>
-
-    <h3>Geral</h3>
-    <span class="js-general-menu"></span>
-
-    <span class="js-sidebar flyout-menu__sidebar"></span>
-
-    <h3>Perfil</h3>
-    <span class="js-profile-menu"></span>
-
-</div>
 
 <!-- <div id="wrapper2"> -->
 <!-- <div id="wrapper3"> -->
@@ -87,8 +76,9 @@ if (!isset($_SESSION['id_user'])) {
         
 
     <ul>
-
-	<li><a class="fpp" href="viewSearchOrder.php">Ficha de Produto em Processo</a></li>
+<?php if($_SESSION['nm_setor']  != "Inbound & int. log."){?>
+	<li><a class="fpp" href="viewSearchOrder.php"><?php echo $tabName?></a></li>
+	<?php }?>
 	<li><a class="overview selected" href="#">Status</a></li>
 	</ul>
 </div>
@@ -118,7 +108,7 @@ $("#liberados").focus();
 
     <div align="center">
         <div class="btn-group" role="group" aria-label="..."> 
-        <button onclick="SearchReleasedPallets();" type="button" id="liberados"   class="btn btn-default">Liberados</button>
+        <button onclick="SearchReleasedPallets();" type="button" id="liberados" class="btn btn-default">Liberados</button>
         <button onclick="SearchTransferredPallets();"type="button" class="btn btn-default">Transferidos</button>
         <button onclick="SearchNotReleasedPallets();"type="button" class="btn btn-default">Não liberados</button>
         </div> 
