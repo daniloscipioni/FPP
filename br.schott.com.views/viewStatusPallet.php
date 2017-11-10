@@ -23,8 +23,9 @@ if( $_SESSION['nm_setor'] == 'Quality management'){
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
 <title>FPP - SCHOTT</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+ <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <meta name="description" content="Redmine">
 <meta name="keywords" content="issue,bug,tracker">
 <meta name="csrf-param" content="authenticity_token">
@@ -33,13 +34,14 @@ if( $_SESSION['nm_setor'] == 'Quality management'){
 <link rel="stylesheet" media="all" href="../css/stylesheets/jquery/jquery-ui-1.11.0.css?1500229109">
 <link rel="stylesheet" media="all" href="../css/themes/schott/stylesheets/application.css?1412685099">
 <link rel="stylesheet" media="all" href="../css/stylesheets/responsive.css?1500229109">
+<link rel="stylesheet" type="text/css" media="print" href="../css/pageprint/print.css">
 <script src="../js/javascripts/jquery-1.11.1-ui-1.11.0-ujs-3.1.4.js?1500229109"></script>
 
 <script src="../js/javascripts/application.js?1500229109"></script>
 <script src="../js/javascripts/responsive.js?1500229109"></script>
 <script src="../js/javascripts/theme.js?1351450256"></script>
 
-<script src="../js/plugin_assets/redmine_checklists/javascripts/checklists.js?1500665867"></script>
+<script src="../js/plugin_assets/redmine_checklists/javascripts/checklists.js?1500665867"></script> 
 </head>
 <body class="theme-Schott controller-welcome action-index">
 
@@ -92,9 +94,9 @@ if( $_SESSION['nm_setor'] == 'Quality management'){
         
     </div>
 
-    <div id="content">
+    <div id="content" >
         
-<h2>Status dos Paletes</h2>
+<h2 class="no-print">Status dos Paletes</h2>
 
 
 <script>
@@ -106,7 +108,7 @@ $("#liberados").focus();
 
 
 
-    <div align="center">
+    <div align="center" class="no-print">
         <div class="btn-group" role="group" aria-label="..."> 
         <button onclick="SearchReleasedPallets();" type="button" id="liberados" class="btn btn-default">Liberados</button>
         <button onclick="SearchTransferredPallets();"type="button" class="btn btn-default">Transferidos</button>

@@ -116,3 +116,59 @@ function MarkPallet(palletSelected)
 				
 }
 
+function PrintPallets(selector)
+{
+	//$("#printTable").css("visibility","visible");
+	$("#printTable").css("display","table");
+	/*var content = document.getElementById('ReleasedPallets').innerHTML,
+	
+		printscreen = window.open('about:blank');
+		printscreen.document.write(content);
+		printscreen.window.print();
+		printscreen.window.close();*/
+	 var $print = $(selector).clone().addClass('print');
+	 
+
+ // Stop JS execution
+ window.print();
+
+ // Remove div once printed
+ $print.remove();
+ $("#printTable").css("display","none");
+ //$("#printTable").css("visibility","hidden");
+}
+
+function print1(){
+	  document.getElementById('btn').onclick = function() {
+          window.print();
+        };
+}
+
+function closePrint () {
+	  document.body.removeChild(this.__container__);
+	  
+	}
+
+
+
+	function setPrint () {
+	  this.contentWindow.__container__ = this;
+	  this.contentWindow.onbeforeunload = closePrint;
+	  this.contentWindow.onafterprint = closePrint;
+	  this.contentWindow.focus(); // Required for IE
+	  this.contentWindow.print();
+	}
+
+	function printPage (sURL) {
+	  var oHiddFrame = document.createElement("iframe");
+	  oHiddFrame.onload = setPrint;
+	  oHiddFrame.style.visibility = "visible";
+	  oHiddFrame.style.position = "fixed";
+	  oHiddFrame.style.right = "0";
+	  oHiddFrame.style.bottom = "0";
+	  oHiddFrame.src = sURL;
+	  
+	  document.body.appendChild(oHiddFrame);
+
+
+	}

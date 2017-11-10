@@ -527,7 +527,7 @@ class connection /* Conexão com o PIDO e retorno JSON*/
     {
         
         // Relatório no PIDO - DSCI_PPDS_FPA
-        $urlOp = 'http://sbritvs0012.bripv.schott.org/CronetJVX//pido/getData?p_pido=50000000380&ORDER_NO=' . $op . '&p_crosscompany=0&p_format=JSON&p_querytimeout=60&p_userid=' . $this->getLogin() . '@cronet_cpbritu1';
+        $urlOp = 'http://10.20.26.28/CronetJVX//pido/getData?p_pido=50000000380&ORDER_NO=' . $op . '&p_crosscompany=0&p_format=JSON&p_querytimeout=60&p_userid=' . $this->getLogin() . '@cronet_cpbritu1';
         
         $jsonFile = file_get_contents($urlOp);
         $jsonStr = json_decode($jsonFile, true);
@@ -573,7 +573,7 @@ class connection /* Conexão com o PIDO e retorno JSON*/
     {
         
         // Relatório no PIDO - DSCI_liberacao_pallet_FPA
-        $urlPallets = 'http://sbritvs0012.bripv.schott.org/CronetJVX//pido/getData?p_pido=50000000435&ORDER_NO=' . $op . '&p_crosscompany=1&p_format=JSON&p_querytimeout=30&p_userid=' . $this->getLogin() . '@cronet_cpbritu1';
+        $urlPallets = 'http://10.20.26.28/CronetJVX//pido/getData?p_pido=50000000435&ORDER_NO=' . $op . '&p_crosscompany=1&p_format=JSON&p_querytimeout=30&p_userid=' . $this->getLogin() . '@cronet_cpbritu1';
         
         $jsonFile = file_get_contents($urlPallets);
         $jsonStr = json_decode($jsonFile, true);
@@ -613,7 +613,7 @@ class connection /* Conexão com o PIDO e retorno JSON*/
     {
         
         // Relatório no PIDO - PPB_BOM_PACKING_FPA
-        $urlMaterials = 'http://sbritvs0012.bripv.schott.org/CronetJVX//pido/getData?p_pido=50000000407&ORDER_NO=' . $op . '&p_crosscompany=0&p_format=JSON&p_querytimeout=30&p_userid=' . $this->getLogin() . '@cronet_cpbritu1';
+        $urlMaterials = 'http://10.20.26.28/CronetJVX//pido/getData?p_pido=50000000407&ORDER_NO=' . $op . '&p_crosscompany=0&p_format=JSON&p_querytimeout=30&p_userid=' . $this->getLogin() . '@cronet_cpbritu1';
         
         $jsonFile = file_get_contents($urlMaterials);
         $jsonStr = json_decode($jsonFile, true);
@@ -643,7 +643,7 @@ class connection /* Conexão com o PIDO e retorno JSON*/
     {
         
         // Relatório no PIDO - PPB_BOM_PACKING_FPA
-        $urlPalletsNo = 'http://sbritvs0012.bripv.schott.org:80/CronetJVX//pido/getData?p_pido=50000000445&ORDER_NO='.$op.'&PALETTE_NO='.$pallet.'&p_crosscompany=1&p_format=JSON&p_querytimeout=30&p_userid='. $this->getLogin() .'@cronet_cpbritu1';
+        $urlPalletsNo = 'http://10.20.26.28/CronetJVX//pido/getData?p_pido=50000000445&ORDER_NO='.$op.'&PALETTE_NO='.$pallet.'&p_crosscompany=1&p_format=JSON&p_querytimeout=30&p_userid='. $this->getLogin() .'@cronet_cpbritu1';
         
         $jsonFile = file_get_contents($urlPalletsNo);
         $jsonStr = json_decode($jsonFile, true);

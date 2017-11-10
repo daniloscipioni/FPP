@@ -60,6 +60,7 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
     private $paleteQty;
     private $ReleasedPalletNo;
     private $timesleep;
+    private $daysleep;
     private $hoursleep;
     private $minutesleep;
     private $machine;
@@ -225,8 +226,15 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
         return $this->timesleep;
     }
 
-   
-     /**
+    /**
+     * @return the $daysleep
+     */
+    public function getDaysleep()
+    {
+        return $this->daysleep;
+    }
+
+    /**
      * @return the $hoursleep
      */
     public function getHoursleep()
@@ -474,7 +482,7 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
     
     function SearchReleased()
     {
-        $sql = "SELECT emission_date,
+/*         $sql = "SELECT emission_date,
                        pallet_no,
                        machine, 
                        prod_sap, 
@@ -484,8 +492,20 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
                        TO_CHAR(current_timestamp - emission_date , 'HH24h MIm SSs') timesleep,
                        TO_CHAR(current_timestamp - emission_date , 'HH24') hoursleep ,
                        TO_CHAR(current_timestamp - emission_date , 'MI') minutesleep  
-                FROM data.tbl_fpp_released_pallets WHERE pallet_removed is false ORDER BY timesleep DESC";
+                FROM data.tbl_fpp_released_pallets WHERE pallet_removed is false ORDER BY timesleep DESC"; */
         
+        $sql = "SELECT emission_date,
+                       pallet_no,
+                       machine, 
+                       prod_sap, 
+                       desc_prod_sap, 
+                       qty_pieces_palete,
+                       released_resp, 
+		       EXTRACT(DAYS FROM (current_timestamp-emission_date)) ||'dia(s) '|| EXTRACT(HOURS FROM (current_timestamp-emission_date))||'h '|| EXTRACT(MINUTES FROM (current_timestamp-emission_date))||'min ' timesleep,
+		       EXTRACT(DAYS FROM (current_timestamp-emission_date)) as daysleep,
+		       EXTRACT(HOURS FROM (current_timestamp-emission_date)) as hoursleep,
+		       EXTRACT(MINUTES FROM (current_timestamp-emission_date)) as minutesleep
+               FROM data.tbl_fpp_released_pallets WHERE pallet_removed is false ORDER BY timesleep DESC";
 
         $conn = new Connect_ReleasedPallets();
         
@@ -505,6 +525,7 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
             $this->prod_sap[$i] = $row['prod_sap'];
             $this->desc_prod_sap[$i] = $row['desc_prod_sap'];
             $this->timesleep[$i] = $row['timesleep'];
+            $this->daysleep[$i] = $row['daysleep'];
             $this->hoursleep[$i] = $row['hoursleep'];
             $this->minutesleep[$i] = $row['minutesleep'];
             $this->releasedResp[$i] = $row['released_resp'];

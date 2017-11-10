@@ -551,3 +551,13 @@ button.ui-corner-all {
 	height: auto;
 	min-height: initial;
 }
+
+
+ 
+.print1 {
+display:none;
+}
+
+.no-print { 
+display:block; 
+}  
