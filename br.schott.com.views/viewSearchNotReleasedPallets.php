@@ -56,7 +56,7 @@ $connPallet->SearchNotReleased();
 
         
 		&nbsp;
-		<table border="1" width="70%" align="center" class="list issue-report">
+		<table border="1" width="70%" align="center" class="list issue-report-auto">
 		    <thead>
 			<th colspan="6">Paletes Não liberados</th>
 			</thead>

@@ -9,7 +9,10 @@ require '../br.schott.com.connection/access.php';
 
 $connPallet = new Access_ReleasedPallets();
 
+
+
 $connPallet->SearchReleased();
+
 
 ?>
 <html>

@@ -136,9 +136,14 @@ $("#liberados").focus();
 
 
 <div id="footer">
-  <div class="bgl"><div class="bgr">
-    Developed by <a href="http://www.schott.com/brazil/portuguese/">Schott Brasil</a> &copy; 2017-2017 Danilo Scipioni
-  </div>
+  <div class="bgl">
+      <div class="bgr">
+        Developed by <a href="http://www.schott.com/brazil/portuguese/">Schott Brasil</a> &copy; 2017-2017 Danilo Scipioni
+      </div>
+      <div class="bgr">
+       	Versão 1.0
+      </div>
+   </div>   
 </div>
 <!-- </div> -->
 <!-- </div> -->

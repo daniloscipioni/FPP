@@ -1,6 +1,21 @@
+//submete o formulário por post usando o botão ENTER
+$("#formSearch").submit(function(){
+	  $.ajax({
+	    type: "POST",
+	    url: "viewFormReturn.php",
+
+	    }).done(function( msg ) {
+	    });
+
+	  return false; // Impede a mudança de página
+
+	});
+
+//////////
+
 function SearchPido()
 {
-	$("#return_result").html('<br><img src="../images/loading_3.gif" width="48px" height="48px"/><br><b>Calculando previs&atilde;o de paletes</b>').text();
+	$("#return_result").html('<br><img src="../images/loading_3.gif" width="48px" height="48px"/><br><b>Buscando informa&ccedil;&otilde;es de paletes...</b>').text();
 	$.post('viewFormReturn.php',
         {
             op:        $("#txt_search_order").val(),
@@ -56,22 +71,6 @@ function SearchNotReleasedPallets()
   
 }
 
-
-//submete o formulário por post usando o botão ENTER
-$("#formSearch").submit(function(){
-	  $.ajax({
-	    type: "POST",
-	    url: "viewFormReturn.php",
-
-	    }).done(function( msg ) {
-	    });
-
-	  return false; // Impede a mudança de página
-
-	});
-
-//////////
-
 function SaveDataReleaseadPallet(order,machine,material,materialDesc,quantity,pallet,index) {
 	
 	if (window.confirm(unescape("Deseja realmente Liberar o palete "+ pallet +" ?"))) {				
@@ -116,52 +115,25 @@ function MarkPallet(palletSelected)
 				
 }
 
-function PrintPallets(selector)
-{
-	//$("#printTable").css("visibility","visible");
-	$("#printTable").css("display","table");
-	/*var content = document.getElementById('ReleasedPallets').innerHTML,
-	
-		printscreen = window.open('about:blank');
-		printscreen.document.write(content);
-		printscreen.window.print();
-		printscreen.window.close();*/
-	 var $print = $(selector).clone().addClass('print');
-	 
-
- // Stop JS execution
- window.print();
-
- // Remove div once printed
- $print.remove();
- $("#printTable").css("display","none");
- //$("#printTable").css("visibility","hidden");
-}
-
-function print1(){
-	  document.getElementById('btn').onclick = function() {
-          window.print();
-        };
-}
-
 function closePrint () {
 	  document.body.removeChild(this.__container__);
 	  
 	}
 
-
-
-	function setPrint () {
+function setPrint () {
 	  this.contentWindow.__container__ = this;
 	  this.contentWindow.onbeforeunload = closePrint;
 	  this.contentWindow.onafterprint = closePrint;
 	  this.contentWindow.focus(); // Required for IE
 	  this.contentWindow.print();
-	}
+}
 
-	function printPage (sURL) {
+function printPage (sURL) {
 	  var oHiddFrame = document.createElement("iframe");
+	  oHiddFrame.height = 1;
+	  oHiddFrame.width = 1;
 	  oHiddFrame.onload = setPrint;
+	 
 	  oHiddFrame.style.visibility = "visible";
 	  oHiddFrame.style.position = "fixed";
 	  oHiddFrame.style.right = "0";
@@ -169,6 +141,6 @@ function closePrint () {
 	  oHiddFrame.src = sURL;
 	  
 	  document.body.appendChild(oHiddFrame);
-
+	 
 
 	}
