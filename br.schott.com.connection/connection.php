@@ -523,6 +523,7 @@ class connection /* Conexão com o PIDO e retorno JSON*/
     }
     
 
+    /* Busca informações da OP */
     function searchOP($op)
     {
         
@@ -569,6 +570,7 @@ class connection /* Conexão com o PIDO e retorno JSON*/
 
     }
 
+    /* Busca informações de paletes bipados por OP */
     function searchPallets($op)
     {
         
@@ -608,7 +610,29 @@ class connection /* Conexão com o PIDO e retorno JSON*/
         }
 
     }
+       
+    /* Busca informações unitárias de paletes bipados por OP e númeor do palete */
+    function searchPalletsNo($op, $pallet)
+    {
+        
+        // Relatório no PIDO - DSCI_liberacao_pallet_unit_FPA
+        $urlPalletsNo = 'http://10.20.26.28/CronetJVX//pido/getData?p_pido=50000000445&ORDER_NO='.$op.'&PALETTE_NO='.$pallet.'&p_crosscompany=1&p_format=JSON&p_querytimeout=30&p_userid='. $this->getLogin() .'@cronet_cpbritu1';
+        
+        $jsonFile = file_get_contents($urlPalletsNo);
+        $jsonStr = json_decode($jsonFile, true);
+        $records = $jsonStr['collection'];
+        
+        $this->setQuantityPalletNo(count($records));
 
+        $this->palletNoBoxPerLayer = $records[0]['UVAR4'];
+        $this->palletNoBoxPerPallet = $records[0]['FUNCTION'];
+        $this->palletNoPalletNo = $records[0]['PALETTE_NO'];
+        $this->palletNoLayerQuantity = (int)$records[0]['FUNCTION7'];
+        $this->palletNoPiecesInPallet = $records[0]['FUNCTION3'];
+
+    }
+   
+    /* Busca materiais de embalagem do palete */
     function searchMaterials($op)
     {
         
@@ -636,29 +660,8 @@ class connection /* Conexão com o PIDO e retorno JSON*/
         foreach ($records as $itemDescription){
             $this->itemDescription[] = $itemDescription['DESCRICAO'];
         }
-
+        
     }
-       
-    function searchPalletsNo($op, $pallet)
-    {
-        
-        // Relatório no PIDO - PPB_BOM_PACKING_FPA
-        $urlPalletsNo = 'http://10.20.26.28/CronetJVX//pido/getData?p_pido=50000000445&ORDER_NO='.$op.'&PALETTE_NO='.$pallet.'&p_crosscompany=1&p_format=JSON&p_querytimeout=30&p_userid='. $this->getLogin() .'@cronet_cpbritu1';
-        
-        $jsonFile = file_get_contents($urlPalletsNo);
-        $jsonStr = json_decode($jsonFile, true);
-        $records = $jsonStr['collection'];
-        
-        $this->setQuantityPalletNo(count($records));
-
-        $this->palletNoBoxPerLayer = $records[0]['UVAR4'];
-        $this->palletNoBoxPerPallet = $records[0]['FUNCTION'];
-        $this->palletNoPalletNo = $records[0]['PALETTE_NO'];
-        $this->palletNoLayerQuantity = (int)$records[0]['FUNCTION7'];
-        $this->palletNoPiecesInPallet = $records[0]['FUNCTION3'];
-
-    }
-    
     
     public function leftover($total_qtde_caixas,$total_caixas_palete){
         

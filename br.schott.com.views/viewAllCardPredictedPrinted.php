@@ -140,7 +140,7 @@ for($j=1;$j< $PredictedQuantity+1;$j++){
 
      for($i=0; $i<$quantityMaterial;$i++){
         if(isset($arrcodItem[$i])){
-            $pdf->Cell(191.5,$height,$arrcodItem[$i].' - '.$arrdescItem[$i],1,1,'L',0);
+            $pdf->Cell(191.5,$height,$arrcodItem[$i].' - '.utf8_decode($arrdescItem[$i]),1,1,'L',0);
         }else{$pdf->Cell(191.5,$height,'',1,1,'L',0); }
         
     } 

@@ -552,6 +552,29 @@ button.ui-corner-all {
 	min-height: initial;
 }
 
+.confirm {
+	background-color:#3f9af5;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:6px 24px;
+	text-decoration:none;
+}
+.confirm:hover {
+	background-color:#378de5;
+}
+.confirm:active {
+	position:relative;
+	top:1px;
+}
+
+
 
  
 .print1 {

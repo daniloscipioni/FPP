@@ -10,7 +10,6 @@ $("#formSearch").submit(function(){
 	  return false; // Impede a mudança de página
 
 	});
-
 //////////
 
 function SearchPido()

@@ -10,8 +10,6 @@ require '../br.schott.com.connection/access.php';
 $connPallet = new Access_ReleasedPallets();
 require '../br.schott.com.util/Util.php';
 
-
-
  $util = new Util();
  $util->setOp($_POST['op']);
 
@@ -19,11 +17,6 @@ require '../br.schott.com.util/Util.php';
  $conn->searchOP($util->getOp());
  $conn->searchMaterials($util->getOp());
  $conn->searchPallets($util->getOp());
-
-
-
-
-
 
 ?>
 <html>
@@ -40,19 +33,20 @@ require '../br.schott.com.util/Util.php';
 <link rel="stylesheet" media="all" href="../css/stylesheets/jquery/jquery-ui-1.11.0.css?1500229109">
 <link rel="stylesheet" media="all" href="../css/themes/schott/stylesheets/application.css?1412685099">
 <link rel="stylesheet" media="all" href="../css/stylesheets/responsive.css?1500229109">
-
 <script src="../js/javascripts/jquery-1.11.1-ui-1.11.0-ujs-3.1.4.js?1500229109"></script>
 <script src="../js/javascripts/application.js?1500229109"></script>
 <script src="../js/javascripts/responsive.js?1500229109"></script>
 <script src="../js/javascripts/theme.js?1351450256"></script>
 <script src="../js/plugin_assets/redmine_checklists/javascripts/checklists.js?1500665867"></script>
 
-
 </head>
 <body>
-<div align="left">
-<button onclick="location.reload();">&#171; Voltar</button>  
-</div>	
+
+	<div align="left">
+		<button onclick="location.reload();">« Voltar</button>
+	</div>
+
+
 <br>
 	<div>
 
@@ -335,15 +329,24 @@ echo $conn->getOrderNo() . str_pad($i, 6, "0", STR_PAD_LEFT);
 
 			<!--		<a href="br.schott.com.views/viewAllCardPredictedPrinted.php?op=<?php //echo $conn->getOrderNo()?>" target="_blank">
 			  		Imprimir Todas</a>-->
-					<input type="submit" value="Imprimir" >
-			</form>
+
+							<input type="submit" class="jstb_em" value="Imprimir" >
+						
+							
+			        	
+			       
+			    
 					</td>
+					
+				</form>	
 			</tr>
 		
 		</table>
+		
 		<?php }?>
-
-
+<div align="right">
+		<button onclick="#" class="confirm">Confirmar</button>
+</div>
 <!--fim -->
 
 
