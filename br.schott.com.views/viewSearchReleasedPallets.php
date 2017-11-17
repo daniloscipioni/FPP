@@ -9,10 +9,8 @@ require '../br.schott.com.connection/access.php';
 
 $connPallet = new Access_ReleasedPallets();
 
-
-
-$connPallet->SearchReleased();
-
+//$connPallet->SearchReleased();
+$connPallet->SearchReleasedDB()
 
 ?>
 <html>
@@ -102,10 +100,9 @@ $connPallet->SearchReleased();
 			    }
 			    ?>
 			<tr>
-					
 				
-				<td bgcolor=<?php echo $cor?> style="width: 5%" align="center"><?php echo date("d/m/Y", strtotime($connPallet->getEmission_date()[$i]))."<br>"; ?></td>
-				<td bgcolor=<?php echo $cor?> style="width: 5%" align="center"><?php echo date("H:m:s", strtotime($connPallet->getEmission_date()[$i])); ?></td>
+				<td bgcolor=<?php echo $cor?> style="width: 5%" align="center"><?php echo date_format($connPallet->getEmission_date()[$i],'d/m/Y')."<br>"; ?></td>
+				<td bgcolor=<?php echo $cor?> style="width: 5%" align="center"><?php echo date_format($connPallet->getEmission_date()[$i],'H:i:s') ?></td>
 				<td bgcolor=<?php echo $cor?> style="width: 5%" align="center"><?php echo $connPallet->getMachine()[$i] ?></td>
 				<td bgcolor=<?php echo $cor?> style="width: 15%" align="center"><?php echo $connPallet->getPallet_no()[$i]; ?></td>
 				<td bgcolor=<?php echo $cor?> style="width: 5%" align="center"><?php echo str_replace(',','.',number_format($connPallet->getPaleteQty()[$i])); ?></td>

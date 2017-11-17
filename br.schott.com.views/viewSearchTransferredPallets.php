@@ -8,7 +8,8 @@ header('P3P:CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT
 require '../br.schott.com.connection/access.php';
 $connPallet = new Access_ReleasedPallets();
 
-$connPallet->SearchTransferred();
+//$connPallet->SearchTransferred();
+$connPallet->SearchTransferredDB();
 
 
 ?>
@@ -67,8 +68,8 @@ $connPallet->SearchTransferred();
 		
 			<?php for ($i=1; $i<=$connPallet->num_rows;$i++){?>
 			<tr>
-				<td width="10%" align="center"><?php echo date("d/m/Y", strtotime($connPallet->getEmission_date()[$i])); ?></td>
-				<td width="10%" align="center"><?php echo date("H:m:s", strtotime($connPallet->getEmission_date()[$i])); ?></td>
+				<td width="10%" align="center"><?php echo date_format($connPallet->getEmission_date()[$i],'d/m/Y'); ?></td>
+				<td width="10%" align="center"><?php echo date_format($connPallet->getEmission_date()[$i],'H:i:s'); ?></td>
 				<td width="20%" align="center"><?php echo $connPallet->getMachine()[$i] ?></td>
 				<td width="20%" align="center"><?php echo $connPallet->getPallet_no()[$i] ?></td>
 				<td width="10%" align="center"><?php echo $connPallet->getProd_sap()[$i] ?></td>

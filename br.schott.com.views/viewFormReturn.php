@@ -46,9 +46,10 @@ $verificationConfirmedPallet =  $connPallet->SearchPalletsConfirm($_POST['op']);
 <script src="../js/plugin_assets/redmine_checklists/javascripts/checklists.js?1500665867"></script>
 </head>
 <body>
-
-<?php if($verificationConfirmedPallet){?>
-<div class='painel' align='center' id='confirmGeneratedPalletInfo'>Os paletes desta ordem já foram confirmados</div>
+<?php if(($_SESSION['nm_setor'] == 'Production planning') || ($_SESSION['nm_setor'] == 'Production overhead')){ ?>
+    <?php if($verificationConfirmedPallet){?>
+    <div class='painel' align='center' id='confirmGeneratedPalletInfo'>Os paletes desta ordem já foram confirmados</div>
+    <?php }?>
 <?php }?>
 &nbsp;
 	<div align="left">
@@ -348,13 +349,14 @@ echo $conn->getOrderNo() . str_pad($i, 6, "0", STR_PAD_LEFT);
 			</tr>
 		
 		</table>
-			<?php if(!$verificationConfirmedPallet){?>
+		   <?php if(($_SESSION['nm_setor'] == 'Production planning') || ($_SESSION['nm_setor'] == 'Production overhead')){ ?>
+			    <?php if(!$verificationConfirmedPallet){?>
 <div align="right" id="confirmGeneratedPallet">
 		<button onclick="SaveDataGeneratedPallet('<?php echo $conn->getOrderNo();?>','<?php echo $conn->getMachine();?>','<?php echo $conn->getMaterialNumber()?>','<?php echo $conn->getMaterialDescription();?>','<?php echo $qtdePecas;?>','<?php echo $numPalete;?>');" class="confirm"> Confirmar</button>
 </div>		
-            <?php }?>
-		<?php }?>
-
+                <?php }?>
+		   <?php }?>
+<?php }?>
 <!--fim -->
 
 
@@ -423,10 +425,10 @@ echo $conn->getOrderNo() . str_pad($i, 6, "0", STR_PAD_LEFT);
 			  
 			   <!-- Aplica a persistência caso o palete já esteja liberado 
 			        Dois botões invisiveis para acertar o tamanho da linha da tabela-->
-			   <?php if($connPallet->SearchPallets($conn->getConfirmedNoPallet()[$i])){echo "<button style='visibility: hidden;'>1</button><font color='green'><b>Liberado</b></font><button style='visibility: hidden;'>1</button>";}else{?>
+			   <?php if($connPallet->SearchPalletsDB($conn->getConfirmedNoPallet()[$i])){echo "<button style='visibility: hidden;'>1</button><font color='green'><b>Liberado</b></font><button style='visibility: hidden;'>1</button>";}else{?>
 				<div id="liberar<?php echo $i?>">
 				    
-					<button class="btnstyle" id="<?php echo "btn".$i?>" name="<?php echo "btn".$i?>"	style="cursor:pointer;" target="_blank" onclick="SaveDataReleaseadPallet('<?php echo $conn->getOrderNo()?>','<?php echo $conn->getMachine()?>','<?php echo $conn->getMaterialNumber()?>','<?php echo str_replace('"','',$conn->getMaterialDesc())?>','<?php echo $conn->getConfirmedApprovedQuantity()[$i]?>','<?php echo $conn->getConfirmedNoPallet()[$i]?>','<?php echo $i?>');"> 
+					<button class="btnstyle" id="<?php echo "btn".$i?>" name="<?php echo "btn".$i?>" style="cursor:pointer;" target="_blank" onclick="UpdateDataReleaseadPallet('<?php echo $conn->getOrderNo()?>','<?php echo $conn->getMachine()?>','<?php echo $conn->getMaterialNumber()?>','<?php echo str_replace('"','',$conn->getMaterialDesc())?>','<?php echo $conn->getConfirmedApprovedQuantity()[$i]?>','<?php echo $conn->getConfirmedNoPallet()[$i]?>','<?php echo $i?>');"> 
 					Liberar</button>
 					
 				</div>

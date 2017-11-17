@@ -3,7 +3,7 @@ require '../br.schott.com.connection/access.php';
 
 $connPallet = new Access_ReleasedPallets();
 
-$connPallet->SearchReleased();
+$connPallet->SearchReleasedDB();
 ?>
 
 <!DOCTYPE link PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">

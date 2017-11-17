@@ -11,8 +11,8 @@ header('P3P:CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT
 //$conn = new connection();
 //$conn->searchOP(6104497300);
 $connPallet = new Access_ReleasedPallets();
-$connPallet->SearchNotReleased();
-
+//$connPallet->SearchNotReleased();
+$connPallet->SearchNotReleasedDB();
 
 
 ?>
@@ -67,30 +67,37 @@ $connPallet->SearchNotReleased();
 				<th>Descrição</th>
 				<!-- <th>%</th> -->
 				<th>Total no Palete</th>
-				<th>Peças Produzidas</th>
+				<!-- <th>Peças Produzidas</th> -->
 				
 			</thead>
 
 
-<?php  for($i=0; $i<= $connPallet->getNotReleasedQuantity()-1; $i++){	
+<?php  
+for($i=1; $i<= $connPallet->num_rows; $i++){	
        		
-    if($connPallet->getAuxiliarnotReleasedCompletePalete()[$i]){
+    /* if($connPallet->getAuxiliarnotReleasedCompletePalete()[$i]){
         			        $cor = "#FAEAA1";
         			    }else{
         			        $cor = "#FFFFFF";
-        			    }
+        			    } */
     			 ?>
 			<tr>
-			    <td bgcolor=<?php echo $cor?> width="20%" align="center"><?php echo $connPallet->getAuxiliarNotReleasedMachine()[$i];?></td>
-				<td bgcolor=<?php echo $cor?> width="20%" align="center"><?php echo $connPallet->getAuxiliarNotReleasedPalletNo()[$i];?></td>
-				<td bgcolor=<?php echo $cor?> width="10%" align="center"><?php echo $connPallet->getAuxiliarNotReleasedCodMaterial()[$i];?></td>
-				<td bgcolor=<?php echo $cor?> width="50%" align="center"><?php echo $connPallet->getAuxiliarnotReleasedDescMaterial()[$i];?></td>
+			  <!--  <td bgcolor=<//?php echo $cor?> width="20%" align="center"><//?php echo $connPallet->getAuxiliarNotReleasedMachine()[$i];?></td>
+				<td bgcolor=<//?php echo $cor?> width="20%" align="center"><//?php echo $connPallet->getAuxiliarNotReleasedPalletNo()[$i];?></td>
+				<td bgcolor=<//?php echo $cor?> width="10%" align="center"><//?php echo $connPallet->getAuxiliarNotReleasedCodMaterial()[$i];?></td>
+				<td bgcolor=<//?php echo $cor?> width="50%" align="center"><//?php echo $connPallet->getAuxiliarnotReleasedDescMaterial()[$i];?></td>-->
 				
 				<!-- <td width="10%" align="center"><//?php echo $connPallet->getAuxiliarNotReleasedReady()[$i] . " %";?></td> -->
 				
-				<td bgcolor=<?php echo $cor?> width="10%" align="center"><?php echo str_replace(',','.',number_format($connPallet->getAuxiliarNotReleasedMaxPieces()[$i])) ;?></td>
-				<td bgcolor=<?php echo $cor?> width="10%" align="center"><?php echo str_replace(',','.',number_format($connPallet->getAuxiliarNotReleasedProdPieces()[$i]));?></td>
-			
+				<!--<td bgcolor=<//?php echo $cor?> width="10%" align="center"><//?php echo str_replace(',','.',number_format($connPallet->getAuxiliarNotReleasedMaxPieces()[$i])) ;?></td>
+				<td bgcolor=<//?php echo $cor?> width="10%" align="center"><//?php echo str_replace(',','.',number_format($connPallet->getAuxiliarNotReleasedProdPieces()[$i]));?></td>-->
+				<!-- // -->
+			    <td width="20%" align="center"><?php echo $connPallet->getMachine()[$i];?></td>
+				<td width="20%" align="center"><?php echo $connPallet->getPallet_no()[$i];?></td>
+				<td width="10%" align="center"><?php echo $connPallet->getProd_sap()[$i];?></td>
+				<td width="50%" align="center"><?php echo $connPallet->getDesc_prod_sap()[$i];?></td>
+				<td width="10%" align="center"><?php echo $connPallet->getPaleteQty()[$i] ;?></td>
+				<!--<td bgcolor=<//?php echo $cor?> width="10%" align="center"><//?php echo str_replace(',','.',number_format($connPallet->getAuxiliarNotReleasedProdPieces()[$i]));?></td>-->
 			</tr>
 		<?php }?>
 		</table>

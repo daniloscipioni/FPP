@@ -451,8 +451,8 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
 
         for ($i=0; $i<count($arrpallet)-1;$i++){
         
-        $sql.= "INSERT INTO data.tbl_fpp_generated_card(order_no, machine , prod_sap, desc_prod_sap,qty_pieces_palete, pallet_no,resp_generated,card_generated,pallet_removed,pallet_released)
-                VALUES ('$order', '$machine', $material, '$materialDesc', $arrquantity[$i],'$arrpallet[$i]','$_SESSION[cd_user]',FALSE,FALSE,FALSE);";
+        $sql.= "INSERT INTO data.tbl_fpp_generated_card(order_no, machine , prod_sap, desc_prod_sap,qty_pieces_palete, pallet_no,resp_generated,card_generated,pallet_removed,pallet_released,status)
+                VALUES ('$order', '$machine', $material, '$materialDesc', $arrquantity[$i],'$arrpallet[$i]','$_SESSION[cd_user]',TRUE,FALSE,FALSE,'1');";
        
         } 
         
@@ -510,6 +510,7 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
         
     }
     
+    /*
     function SearchPallets($pallet)
     {
         $sql = "SELECT 1 FROM data.tbl_fpp_released_pallets WHERE pallet_no ='$pallet';";
@@ -528,20 +529,10 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
         $conn->close();
         
     }
-    
+    */
+    /*
     function SearchReleased()
     {
-/*         $sql = "SELECT emission_date,
-                       pallet_no,
-                       machine, 
-                       prod_sap, 
-                       desc_prod_sap, 
-                       qty_pieces_palete,
-                       released_resp, 
-                       TO_CHAR(current_timestamp - emission_date , 'HH24h MIm SSs') timesleep,
-                       TO_CHAR(current_timestamp - emission_date , 'HH24') hoursleep ,
-                       TO_CHAR(current_timestamp - emission_date , 'MI') minutesleep  
-                FROM data.tbl_fpp_released_pallets WHERE pallet_removed is false ORDER BY timesleep DESC"; */
         
         $sql = "SELECT emission_date,
                        pallet_no,
@@ -584,7 +575,8 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
         
         $conn->close();
     }
-    
+    */
+    /*
     function SearchTransferred()
     {
         $sql = "SELECT emission_date, 
@@ -619,7 +611,8 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
         
         $conn->close();
     }
-    
+    */
+    /*
     function SearchNotReleased(){
         
         $sql = "SELECT pallet_no FROM data.tbl_fpp_released_pallets";
@@ -634,7 +627,7 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
        
         
         
-        /* Salva os valores dos paletes já liberados da consulta ao BD POSTGRES */
+        /* Salva os valores dos paletes já liberados da consulta ao BD POSTGRES 
         while ($row = pg_fetch_assoc($query)) {
             $this->ReleasedPalletNo[] = $row['pallet_no'];
         }
@@ -648,7 +641,7 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
         $records = $jsonStr['collection'];
 
         
-        /* Atribui os valores nos vetores da consulta ao relatório do PIDO  */
+        /* Atribui os valores nos vetores da consulta ao relatório do PIDO  
           foreach ($records as $palletno){
             $this->notReleasedPalletNo[] = $palletno['NO_PALETE'];
           }
@@ -687,13 +680,13 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
          
 
         
-        /* Atribui os valores de número dos paletes liberados no vetor  */
+        /* Atribui os valores de número dos paletes liberados no vetor 
          for($i = 0; $i<=$this->num_rows;$i++){
              $releasedPallet[] = trim($this->ReleasedPalletNo[$i]);
          }  
          
                 
-         /* Atribui os valores de paletes não liberados aos respectivos vetores  */
+         /* Atribui os valores de paletes não liberados aos respectivos vetores  
           for($i = 0; $i<=count($records);$i++){
               $noReleasedPallet[] = trim($this->notReleasedPalletNo[$i]);
               $noReleasedOrder[] = trim($this->notReleasedOrderNo[$i]);
@@ -706,15 +699,15 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
               $noReleasedCompletePalete[] = trim($this->notReleasedCompletePalete[$i]);             
           }   
     
-          /* Diferença entre vetores de paletes não liberados(do PIDO) e paletes liberados(do BD POSTGRES) */
+          /* Diferença entre vetores de paletes não liberados(do PIDO) e paletes liberados(do BD POSTGRES) 
           $ArrDiference = array_diff($noReleasedPallet,$releasedPallet);
           
 
-          /* Atribui os valores das variaveis da diferênça entre paletes liberados e paletes não liberados das ordens que estão rodando em máquinas   */
+          /* Atribui os valores das variaveis da diferênça entre paletes liberados e paletes não liberados das ordens que estão rodando em máquinas   
           foreach ($ArrDiference as $value){
          
               for($i = 0;$i<=count($noReleasedPallet);$i++){
-                  /* Verifica se o valor*/
+                  /* Verifica se o valor
                   if($value == $noReleasedPallet[$i]){
                       $this->AuxiliarNotReleasedPalletNo[] = $noReleasedPallet[$i];
                       $this->AuxiliarNotReleasedOrderNo[] = $noReleasedOrder[$i];
@@ -730,12 +723,222 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
              
           }  
       
-          /* Atribui a quantidade de itens a variavel que será usada na impressão do resultado */ 
+          /* Atribui a quantidade de itens a variavel que será usada na impressão do resultado  
           $this->setNotReleasedQuantity(count($ArrDiference));
           
         
     }
+    */
     
-   
+    function CancelOrder($order){
+        $sql = "UPDATE data.tbl_fpp_generated_card SET status = '0' where order_no = '$order';";
+        
+        
+        $conn = new Connect_ReleasedPallets();
+        
+        $conn->open();
+        
+        if ($query = pg_query($sql))
+            try {
+                
+        } catch (Exception $ex) {
+            echo "Dados não Atualizados";
+        }
+        
+        $conn->close();
+    }
+    
+    function SearchNotReleasedDB()
+    {
+           
+        $sql = "SELECT date_generated,
+                       pallet_no,
+                       machine,
+                       prod_sap,
+                       desc_prod_sap,
+                       qty_pieces_palete,
+                       resp_released,
+		       EXTRACT(DAYS FROM (current_timestamp-date_generated)) ||'dia(s) '|| EXTRACT(HOURS FROM (current_timestamp-date_generated))||'h '|| EXTRACT(MINUTES FROM (current_timestamp-date_generated))||'min ' timesleep,
+		       EXTRACT(DAYS FROM (current_timestamp-date_generated)) as daysleep,
+		       EXTRACT(HOURS FROM (current_timestamp-date_generated)) as hoursleep,
+		       EXTRACT(MINUTES FROM (current_timestamp-date_generated)) as minutesleep
+               FROM data.tbl_fpp_generated_card WHERE card_generated is true and pallet_released is false ORDER BY timesleep DESC";
+        
+        $conn = new Connect_ReleasedPallets();
+        
+        $conn->open();
+        
+        $query = pg_query($sql);
+        
+        $this->num_rows = pg_num_rows($query);
+        
+        $i = 1;
+        while ($row = pg_fetch_array($query)) {
+            
+            $this->emission_date[$i] = date_create($row['date_generated']);
+            $this->pallet_no[$i] = $row['pallet_no'];
+            $this->machine[$i] = $row['machine'];
+            $this->paleteQty[$i] = $row['qty_pieces_palete'];
+            $this->prod_sap[$i] = $row['prod_sap'];
+            $this->desc_prod_sap[$i] = $row['desc_prod_sap'];
+            $this->timesleep[$i] = $row['timesleep'];
+            $this->daysleep[$i] = $row['daysleep'];
+            $this->hoursleep[$i] = $row['hoursleep'];
+            $this->minutesleep[$i] = $row['minutesleep'];
+            $this->releasedResp[$i] = $row['resp_released'];
+            $i ++;
+            
+        }
+        
+        $conn->close();
+    }
+     
+    function SearchReleasedDB()
+    {
+        
+        $sql = "SELECT date_released,
+                       pallet_no,
+                       machine,
+                       prod_sap,
+                       desc_prod_sap,
+                       qty_pieces_palete,
+                       resp_released,
+		       EXTRACT(DAYS FROM (current_timestamp-date_released)) ||'dia(s) '|| EXTRACT(HOURS FROM (current_timestamp-date_released))||'h '|| EXTRACT(MINUTES FROM (current_timestamp-date_released))||'min ' timesleep,
+		       EXTRACT(DAYS FROM (current_timestamp-date_released)) as daysleep,
+		       EXTRACT(HOURS FROM (current_timestamp-date_released)) as hoursleep,
+		       EXTRACT(MINUTES FROM (current_timestamp-date_released)) as minutesleep
+               FROM data.tbl_fpp_generated_card WHERE card_generated is true and pallet_released is true and pallet_removed is false ORDER BY timesleep DESC";
+        
+        $conn = new Connect_ReleasedPallets();
+        
+        $conn->open();
+        
+        $query = pg_query($sql);
+        
+        $this->num_rows = pg_num_rows($query);
+        
+        $i = 1;
+        while ($row = pg_fetch_array($query)) {
+            
+            $this->emission_date[$i] = date_create($row['date_released']);
+            $this->pallet_no[$i] = $row['pallet_no'];
+            $this->machine[$i] = $row['machine'];
+            $this->paleteQty[$i] = $row['qty_pieces_palete'];
+            $this->prod_sap[$i] = $row['prod_sap'];
+            $this->desc_prod_sap[$i] = $row['desc_prod_sap'];
+            $this->timesleep[$i] = $row['timesleep'];
+            $this->daysleep[$i] = $row['daysleep'];
+            $this->hoursleep[$i] = $row['hoursleep'];
+            $this->minutesleep[$i] = $row['minutesleep'];
+            $this->releasedResp[$i] = $row['resp_released'];
+            $i ++;
+            
+        }
+        
+        $conn->close();
+    }
+    
+    function SearchTransferredDB()
+    {
+        $sql = "SELECT date_transferred,
+                       pallet_no,
+                       machine,
+                       prod_sap,
+                       desc_prod_sap,
+                       qty_pieces_palete,
+                       resp_released,
+                       resp_transferred,
+		       EXTRACT(DAYS FROM (current_timestamp-date_transferred)) ||'dia(s) '|| EXTRACT(HOURS FROM (current_timestamp-date_transferred))||'h '|| EXTRACT(MINUTES FROM (current_timestamp-date_transferred))||'min ' timesleep,
+		       EXTRACT(DAYS FROM (current_timestamp-date_transferred)) as daysleep,
+		       EXTRACT(HOURS FROM (current_timestamp-date_transferred)) as hoursleep,
+		       EXTRACT(MINUTES FROM (current_timestamp-date_transferred)) as minutesleep
+               FROM data.tbl_fpp_generated_card WHERE card_generated is true and pallet_removed is true ORDER BY timesleep DESC";
+        
+        $conn = new Connect_ReleasedPallets();
+        
+        $conn->open();
+        
+        $query = pg_query($sql);
+        
+        $this->num_rows = pg_num_rows($query);
+        
+        $i = 1;
+        while ($row = pg_fetch_array($query)) {
+            
+            $this->emission_date[$i] = date_create($row['date_transferred']);
+            $this->pallet_no[$i] = $row['pallet_no'];
+            $this->machine[$i] = $row['machine'];
+            $this->paleteQty[$i] = $row['qty_pieces_palete'];
+            $this->prod_sap[$i] = $row['prod_sap'];
+            $this->desc_prod_sap[$i] = $row['desc_prod_sap'];
+            $this->transfResp[$i] = $row['resp_transferred'];
+            $this->timesleep[$i] = $row['timesleep'];
+            $this->daysleep[$i] = $row['daysleep'];
+            $this->hoursleep[$i] = $row['hoursleep'];
+            $this->minutesleep[$i] = $row['minutesleep'];
+            $this->releasedResp[$i] = $row['resp_released'];
+            $i ++;
+            
+        }
+        
+        $conn->close();
+    }
+
+    function UpdateReleasedPalletDB($pallet)
+    {
+        $sql = "UPDATE data.tbl_fpp_generated_card SET pallet_released = true, resp_released = '$_SESSION[cd_user]', date_released = now() where pallet_no = '$pallet';";
+        
+        
+        $conn = new Connect_ReleasedPallets();
+        
+        $conn->open();
+        
+        if ($query = pg_query($sql))
+            try {
+                
+        } catch (Exception $ex) {
+            echo "Dados não Atualizados";
+        }
+        
+        $conn->close();
+    }
+    
+    function UpdateTranferredPalletDB($pallet)
+    {
+        $sql = "UPDATE data.tbl_fpp_generated_card SET pallet_removed = true,resp_transferred = '$_SESSION[cd_user]', date_transferred=now() where pallet_no = '$pallet';";
+        
+        
+        $conn = new Connect_ReleasedPallets();
+        
+        $conn->open();
+        
+        if ($query = pg_query($sql))
+            try {
+                
+        } catch (Exception $ex) {
+            echo "Dados não Atualizados";
+        }
+        
+        $conn->close();
+    }
+
+    function SearchPalletsDB($pallet)
+    {
+        $sql = "SELECT 1 FROM data.tbl_fpp_generated_card WHERE pallet_no ='$pallet' and pallet_released is true;";
+        
+        
+        $conn = new Connect_ReleasedPallets();
+        
+        $conn->open();
+        
+        $query = pg_query($sql);
+        
+        $this->num_rows = pg_num_rows($query);
+        
+        return $this->num_rows;
+        
+        $conn->close();
+        
+    }
 }
 ?>

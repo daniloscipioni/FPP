@@ -11,6 +11,18 @@ $("#formSearch").submit(function(){
 
 	});
 //////////
+//submete o formulário por post usando o botão ENTER
+$("#formCancel").submit(function(){
+	  $.ajax({
+	    type: "POST",
+
+	    }).done(function( msg ) {
+	    });
+
+	  return false; // Impede a mudança de página
+
+	});
+//////////
 
 function SearchPido()
 {
@@ -31,6 +43,18 @@ function SearchPido()
   
 }
 
+function CancelOrder(order)
+{
+	if (window.confirm(unescape("Deseja realmente cancelar as etiquetas da ordem de produção "+order +" ?"))) {				
+	$.post('../br.schott.com.util/CancelGeneratedOrder.php',
+        {
+            order:        $("#txt_cancel_order").val(),
+         
+        }
+         
+         )   
+	}
+}
 function SearchReleasedPallets()
 {
 	var msg = "Buscando Paletes Liberados";
@@ -74,6 +98,26 @@ function SaveDataReleaseadPallet(order,machine,material,materialDesc,quantity,pa
 	
 	if (window.confirm(unescape("Deseja realmente Liberar o palete "+ pallet +" ?"))) {				
 	$.post('../br.schott.com.util/SaveDataReleasedPallet.php', {
+					order    : order,
+					machine    : machine,
+					material : material,
+					materialDesc : materialDesc,
+					pallet: pallet,
+					quantity:quantity
+				}, function(data) {
+					$("#return_result_data").html(data);
+				}
+	
+				)
+				MarkField(index);
+	}		
+
+}
+
+function UpdateDataReleaseadPallet(order,machine,material,materialDesc,quantity,pallet,index) {
+
+	if (window.confirm(unescape("Deseja realmente Liberar o palete "+ pallet +" ?"))) {				
+	$.post('../br.schott.com.util/UpdateDataReleasedPallet.php', {
 					order    : order,
 					machine    : machine,
 					material : material,

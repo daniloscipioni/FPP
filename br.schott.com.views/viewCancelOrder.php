@@ -1,6 +1,6 @@
 <?php 
 session_start();
-header('Content-type: text/html; charset=UTF-8');
+header('Content-type: text/html; charset=ISO-8859-1');
 
 if (!isset($_SESSION['id_user'])) {
     header("Location: ./br.schott.com.auth/auth-login.php");
@@ -80,9 +80,9 @@ if( $_SESSION['nm_setor'] == 'Quality management'){
 
     <ul>
 
-	<li><a class="overview selected" href="#"><?php echo $tabName?></a></li>
+	<li><a class="issues" href="viewSearchOrder.php"><?php echo $tabName?></a></li>
 	<li><a class="issues" href="viewStatusPallet.php">Status</a></li>
-	<li><a class="issues" href="viewCancelOrder.php">Cancelamento de Palete</a></li>
+	<li><a class="overview selected" href="#">Cancelamento de Palete</a></li>
 
 	</ul>
 </div>
@@ -102,12 +102,12 @@ if( $_SESSION['nm_setor'] == 'Quality management'){
 
 
 <!-- <div class="splitcontentleft">-->
-<div id="search-order"> 
+<div id="cancel-order"> 
             <div id="login-form"> 
-               <form  id="formSearch" method="post" target="_blank">
-                  <label for="order">Ordem de ProduÃ§Ã£o</label>
-                  <input type="text" name="txt_search_order" id="txt_search_order" tabindex="1" autofocus="autofocus" maxlength="10">
-                  <input class="btnstyle" type="submit" name="btn_search_order" value="Buscar &#187;" onclick="SearchPido();" tabindex="1" id="btn_search_order">
+               <form  id="formCancel" method="post" target="_blank">
+                  <label for="order">Ordem de Produção</label>
+                  <input type="text" name="txt_cancel_order" id="txt_cancel_order" tabindex="1" autofocus="autofocus" maxlength="10">
+                  <input class="btnstyle" type="submit" name="btn_cancel_order" value="Cancelar &Chi;" onclick="CancelOrder($('#txt_cancel_order').val());" tabindex="1" id="btn_cancel_order">
                </form>
          	</div> 
 </div> 

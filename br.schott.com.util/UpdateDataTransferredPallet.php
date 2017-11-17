@@ -6,6 +6,7 @@ extract($_POST);
 
 $releasedPallets = new Access_ReleasedPallets();
 
-$releasedPallets->UpdateTranferredPallet($pallet);
+
+$releasedPallets->UpdateTranferredPalletDB($pallet);
 
 ?>
