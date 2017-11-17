@@ -442,6 +442,36 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
         
     }
     
+    function InsertGeneratedPallet($order,$machine,$material,$materialDesc,$quantity,$pallet)
+    {
+        $sql = '';
+        $arrquantity = explode(';', $quantity);
+        $arrpallet = explode(';', $pallet);
+        
+
+        for ($i=0; $i<count($arrpallet)-1;$i++){
+        
+        $sql.= "INSERT INTO data.tbl_fpp_generated_card(order_no, machine , prod_sap, desc_prod_sap,qty_pieces_palete, pallet_no,resp_generated,card_generated,pallet_removed,pallet_released)
+                VALUES ('$order', '$machine', $material, '$materialDesc', $arrquantity[$i],'$arrpallet[$i]','$_SESSION[cd_user]',FALSE,FALSE,FALSE);";
+       
+        } 
+        
+
+        $conn = new Connect_ReleasedPallets();
+        
+        $conn->open();
+        
+        if ($query = pg_query($sql))
+            try {
+                
+        } catch (Exception $ex) {
+            echo "Dados não Salvos";
+        }
+        
+        $conn->close();
+         
+    }
+    
     function UpdateTranferredPallet($pallet)
     {
         $sql = "UPDATE data.tbl_fpp_released_pallets SET pallet_removed = true,transf_resp = '$_SESSION[cd_user]' where pallet_no = '$pallet';";
@@ -459,6 +489,25 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
         }
         
         $conn->close();
+    }
+    
+    function SearchPalletsConfirm($order)
+    {
+        $sql = "SELECT 1 FROM data.tbl_fpp_generated_card WHERE order_no = '$order' limit 1;";
+        
+        
+        $conn = new Connect_ReleasedPallets();
+        
+        $conn->open();
+        
+        $query = pg_query($sql);
+        
+        $this->num_rows = pg_num_rows($query);
+        
+        return $this->num_rows;
+        
+        $conn->close();
+        
     }
     
     function SearchPallets($pallet)

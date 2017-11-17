@@ -22,6 +22,7 @@ require '../br.schott.com.util/Util.php';
  
  //$conn->searchPallets($util->getOp());
  
+$verificationConfirmedPallet =  $connPallet->SearchPalletsConfirm($_POST['op']);
 
 ?>
 <html>
@@ -43,10 +44,13 @@ require '../br.schott.com.util/Util.php';
 <script src="../js/javascripts/responsive.js?1500229109"></script>
 <script src="../js/javascripts/theme.js?1351450256"></script>
 <script src="../js/plugin_assets/redmine_checklists/javascripts/checklists.js?1500665867"></script>
-
 </head>
 <body>
 
+<?php if($verificationConfirmedPallet){?>
+<div class='painel' align='center' id='confirmGeneratedPalletInfo'>Os paletes desta ordem já foram confirmados</div>
+<?php }?>
+&nbsp;
 	<div align="left">
 		<button class="btnstyle" onclick="location.reload();">« Voltar</button>
 	</div>
@@ -344,9 +348,11 @@ echo $conn->getOrderNo() . str_pad($i, 6, "0", STR_PAD_LEFT);
 			</tr>
 		
 		</table>
-<div align="right">
+			<?php if(!$verificationConfirmedPallet){?>
+<div align="right" id="confirmGeneratedPallet">
 		<button onclick="SaveDataGeneratedPallet('<?php echo $conn->getOrderNo();?>','<?php echo $conn->getMachine();?>','<?php echo $conn->getMaterialNumber()?>','<?php echo $conn->getMaterialDescription();?>','<?php echo $qtdePecas;?>','<?php echo $numPalete;?>');" class="confirm"> Confirmar</button>
 </div>		
+            <?php }?>
 		<?php }?>
 
 <!--fim -->
