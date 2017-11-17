@@ -8,26 +8,26 @@ setlocale(LC_ALL, 'pt_BR');
 require '../br.schott.com.config/configBarcode.php';
 
 
-$op = $_GET['op'];
-$Customer = $_POST['nmcustomer'];
-$Material = $_POST['nmmaterial'];
-$Machine = $_POST['nmmachine'];
-$MaterialDesc = $_POST['nmmaterialdesc'];
-$DeliveryDate = $_POST['nmdeliverydate'];
-$boxPerLayer = $_POST['nmboxperlayer'];
-$boxQuantity = $_POST['nmboxqty'];
-$layerQuantity = $_POST['nmlayerqty'];
-$pcsPerBox = $_POST['nmpcsperbox'];
-$pcsQuantity = $_POST['nmpcsqty'];
-$palletQuantity = $_POST['nmpalletquantity'];
+$op = $_GET['nmop'];
+$Customer = $_GET['nmcustomer'];
+$Material = $_GET['nmmaterial'];
+$Machine = $_GET['nmmachine'];
+$MaterialDesc = $_GET['nmmaterialdesc'];
+$DeliveryDate = $_GET['nmdeliverydate'];
+$boxPerLayer = $_GET['nmboxperlayer'];
+$boxQuantity = $_GET['nmboxqty'];
+$layerQuantity = $_GET['nmlayerqty'];
+$pcsPerBox = $_GET['nmpcsperbox'];
+$pcsQuantity = $_GET['nmpcsqty'];
+$palletQuantity = $_GET['nmpalletquantity'];
 
-extract($_POST);
+extract($_GET);
 $arrcodItem = explode(';', $nmcoditem);
 $arrdescItem = explode(';', $nmdescitem);
 $arrqtyItem = explode(';', $nmqtyitem);
 $arrunityItem = explode(';', $nmunityitem);
 
-$quantityMaterial = $_POST['nmqtdematerial'];
+$quantityMaterial = $_GET['nmqtdematerial'];
 
 $pdf = new PDF_Code39('P','mm',array(210,297)); // P = Portrait, em milimetros, e A4 (210x297)
 $pdf->SetMargins(7, 6, 10); 
@@ -120,11 +120,11 @@ $pdf->SetTitle('FPP - Print');
     $pdf->SetFont('Arial','', 14);
     $pdf->Cell(95.75,$height * 2,'Número do Palete',1,0,'C',0);
     $pdf->SetFont('Arial','B', 14);
-    $pdf->Cell(95.75,$height * 2, $_GET['unity']." / ".$palletQuantity,1,1,'C',0);
+    $pdf->Cell(95.75,$height * 2, $_GET['nmlineitem']." / ".$palletQuantity,1,1,'C',0);
     
     $pdf->SetFont('Arial','', 18);
-    $pdf->Cell(95.75,13,$_GET['pallet_no'],1,0,'C',0);
-    $pdf->Cell(95.75,13,$pdf->Code39(115, 106 + $height * 3,trim($_GET['pallet_no']),true,false,0.2545,$height*1.58,true),1,0,'L',0);
+    $pdf->Cell(95.75,13,$_GET['nmpalletno'],1,0,'C',0);
+    $pdf->Cell(95.75,13,$pdf->Code39(115, 106 + $height * 3,trim($_GET['nmpalletno']),true,false,0.2545,$height*1.58,true),1,0,'L',0);
   
     $pdf->ln($space+13);
     

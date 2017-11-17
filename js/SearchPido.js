@@ -92,8 +92,8 @@ function SaveDataReleaseadPallet(order,machine,material,materialDesc,quantity,pa
 
 function MarkField(index)
 {
-
-	$("#liberar"+index).html("<font color='green'><b>Liberado</b></font>");
+	//Dois botões invisiveis para acertar o tamanho da linha da tabela
+	$("#liberar"+index).html("<button style='visibility: hidden;'>1</button><font color='green'><b>Liberado</b></font><button style='visibility: hidden;'>1</button>");
   
 }
 
@@ -143,3 +143,23 @@ function printPage (sURL) {
 	 
 
 	}
+
+
+function SaveDataGeneratedPallet(order,machine,material,materialDesc,quantity,pallet) {
+	alert(order + ' - ' + machine+ ' - ' +material+ ' - ' +materialDesc+ ' - ' +quantity+ ' - ' +pallet);
+	if (window.confirm(unescape("Confirmar a geração dos paletes da OP "+ order +" ?"))) {				
+	$.post('../br.schott.com.util/SaveDataGeneratedPallet.php', {
+					order    : order,
+					machine    : machine,
+					material : material,
+					materialDesc : materialDesc,
+					quantity:quantity,
+					pallet: pallet
+				}, function(data) {
+				
+				}
+	
+				)
+			}		
+
+}

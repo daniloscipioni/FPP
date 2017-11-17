@@ -574,7 +574,32 @@ button.ui-corner-all {
 	top:1px;
 }
 
+.btnstyle {
+  background: #fffcff;
+  background-image: -webkit-linear-gradient(top, #fffcff, #e8e8e8);
+  background-image: -moz-linear-gradient(top, #fffcff, #e8e8e8);
+  background-image: -ms-linear-gradient(top, #fffcff, #e8e8e8);
+  background-image: -o-linear-gradient(top, #fffcff, #e8e8e8);
+  background-image: linear-gradient(to bottom, #fffcff, #e8e8e8);
+  font-family: Arial;
+  color: #0a0a0a;
+  cursor:pointer;
+  font-size: 13px;
+  padding: 3px 8px 3px 8px;
+  border: solid #c3c7c9 0.5px;
+  text-decoration: none;
+}
 
+.btnstyle:hover {
+  text-decoration: none;
+  color: black;
+}
+.btnstyle:link {
+   color: blue;
+}
+.btnstyle:visited {
+    color: black;
+}
 
  
 .print1 {

@@ -105,7 +105,7 @@ if( $_SESSION['nm_setor'] == 'Quality management'){
                <form  id="formSearch" method="post" target="_blank">
                   <label for="order">Ordem de Produção</label>
                   <input type="text" name="txt_search_order" id="txt_search_order" tabindex="1" autofocus="autofocus" maxlength="10">
-                  <input type="submit" name="btn_search_order" value="Buscar &#187;" onclick="SearchPido();" tabindex="1" id="btn_search_order">
+                  <input class="btnstyle" type="submit" name="btn_search_order" value="Buscar &#187;" onclick="SearchPido();" tabindex="1" id="btn_search_order">
                </form>
          	</div> 
 </div> 

@@ -14,9 +14,14 @@ require '../br.schott.com.util/Util.php';
  $util->setOp($_POST['op']);
 
  $conn = new connection();
- $conn->searchOP($util->getOp());
- $conn->searchMaterials($util->getOp());
- $conn->searchPallets($util->getOp());
+ //$conn->searchOP($util->getOp());
+ $conn->searchOP($_POST['op']);
+ 
+// $conn->searchMaterials($util->getOp());
+ $conn->searchMaterials($_POST['op']);
+ 
+ //$conn->searchPallets($util->getOp());
+ 
 
 ?>
 <html>
@@ -43,7 +48,7 @@ require '../br.schott.com.util/Util.php';
 <body>
 
 	<div align="left">
-		<button onclick="location.reload();">« Voltar</button>
+		<button class="btnstyle" onclick="location.reload();">« Voltar</button>
 	</div>
 
 
@@ -155,11 +160,7 @@ for ($i = 0; $i <= $conn->getQuantityMaterial() - 1; $i ++) {
 				</td>
 			</tr>  
 			
-			
-			
-        <?php 
-        
-}?>    
+        <?php }?>    
             
         </table>
 		&nbsp;
@@ -184,6 +185,7 @@ for ($i = 0; $i <= $conn->getQuantityMaterial() - 1; $i ++) {
 
 		<!--inicio -->
 	<?php if(($_SESSION['nm_setor'] == 'Production planning') || ($_SESSION['nm_setor'] == 'Production overhead')){ ?>
+	
 		<table border="1" width="70%" align="center" valign="top" class="list issue-report">
 			<tr>
 				<td colspan="4" align="center"><b>Paletes Previstos</b></td>
@@ -259,7 +261,7 @@ echo $conn->getOrderNo() . str_pad($i, 6, "0", STR_PAD_LEFT);
                             $predicatedInformation[$i]['qtde_camadas'] = $util->calcPredicatedLayers($predicatedBoxQuantity, $conn->getBoxPerLayer());
                             $qtdeCamadas .= $util->calcPredicatedLayers($predicatedBoxQuantity, $conn->getBoxPerLayer()).";";
                             ?>                
-                        </td>
+                 </td>
 				<!-- -- -->
 
 				<!--Qtde Peças-->
@@ -301,21 +303,27 @@ echo $conn->getOrderNo() . str_pad($i, 6, "0", STR_PAD_LEFT);
         $_SESSION['predictedInfo'] = $predicatedInformation;
         
         ?>
-                    <tr>
+                    <tr height="15">
 
 					
 				
-
-					<td align="center" colspan="4">
-			<form action="../br.schott.com.views/viewAllCardPredictedPrinted.php?op=<?php echo $conn->getOrderNo()?>" method="post" target="_blank" >
+			
+					<td align="center"  colspan="4">
+			 <form action="../br.schott.com.views/viewAllCardPredictedPrinted.php?op=<?php echo $conn->getOrderNo()?>" method="post" target="_blank" id="predictedPallets"> 
+					
+					<input type="hidden" id="idmachine" 	 name="nmmachine" value="<?php echo $conn->getMachine();?>">
+					<input type="hidden" id="idop" 	 	name="nmop" value="<?php echo $conn->getOrderNo();?>">
 					<input type="hidden" id="idnumPalete"    name="nmnumPalete" value="<?php echo $numPalete;?>">
+					<input type="hidden" id="idcodmaterial"name="nmcodmaterial" value="<?php echo $conn->getMaterialNumber()?>">
+					<input type="hidden" id="iddescdmaterial"name="nmdescmaterial" value="<?php echo $conn->getMaterialDescription();?>">
+					<input type="hidden" id="idqtdePecas"    name="nmqtdePecas" value="<?php echo $qtdePecas;?>">
+					
+					
+					<input type="hidden" id="idmaterial" 	 name="nmmaterial" value="<?php echo $conn->getMaterialNumber()." - ".$conn->getMaterialDescription();?>">
 					<input type="hidden" id="idqtdeCx"       name="nmqtdeCx" value="<?php echo $qtdeCaixa;?>">
 					<input type="hidden" id="idqtdeCmd"      name="nmqtdeCmd" value="<?php echo $qtdeCamadas;?>">
-					<input type="hidden" id="idqtdePecas"    name="nmqtdePecas" value="<?php echo $qtdePecas;?>">
 					<input type="hidden" id="idrest" 		 name="nmrest" value="<?php echo $rest;?>">	
 					<input type="hidden" id="idcustomer"     name="nmcustomer" value="<?php echo (int)$conn->getCodeCustomer()." - ".$conn->getCustomer();?>">
-					<input type="hidden" id="idmaterial" 	 name="nmmaterial" value="<?php echo $conn->getMaterialNumber()." - ".$conn->getMaterialDescription();?>">
-					<input type="hidden" id="idmachine" 	 name="nmmachine" value="<?php echo $conn->getMachine();?>">	
 					<input type="hidden" id="idmaterialdesc" name="nmmaterialdesc" value="<?php echo $conn->getMaterialDesc();?>">	
 					<input type="hidden" id="iddeliverydate" name="nmdeliverydate" value="<?php echo $conn->getDeliveryDate();?>">
 					<input type="hidden" id="idquantity" 	 name="nmquantity" value="<?php echo $conn->getPalletPredictedQuantity();?>">	
@@ -326,33 +334,31 @@ echo $conn->getOrderNo() . str_pad($i, 6, "0", STR_PAD_LEFT);
 					<input type="hidden" id="nmdescitem" 	 name="nmdescitem" value="<?php echo $descItem;?>">	
 					<input type="hidden" id="nmqtyitem" 	 name="nmqtyitem" value="<?php echo $qtyItem;?>">	
 					<input type="hidden" id="nmunityitem" 	 name="nmunityitem" value="<?php echo $unityItem;?>">
-
-			<!--		<a href="br.schott.com.views/viewAllCardPredictedPrinted.php?op=<?php //echo $conn->getOrderNo()?>" target="_blank">
-			  		Imprimir Todas</a>-->
-
-							<input type="submit" class="jstb_em" value="Imprimir" >
-						
-							
-			        	
-			       
-			    
-					</td>
 					
-				</form>	
+			   <a class="btnstyle" onClick="document.getElementById('predictedPallets').submit();" target="_blank">imprimir</a>
+				<!-- Botão não visivel para que o botão caiba na linha da tabela -->
+			   <button style="visibility: hidden">1</button>
+			
+			</form>			
+	</td>		
 			</tr>
 		
 		</table>
-		
-		<?php }?>
 <div align="right">
-		<button onclick="#" class="confirm">Confirmar</button>
-</div>
+		<button onclick="SaveDataGeneratedPallet('<?php echo $conn->getOrderNo();?>','<?php echo $conn->getMachine();?>','<?php echo $conn->getMaterialNumber()?>','<?php echo $conn->getMaterialDescription();?>','<?php echo $qtdePecas;?>','<?php echo $numPalete;?>');" class="confirm"> Confirmar</button>
+</div>		
+		<?php }?>
+
 <!--fim -->
 
 
 		&nbsp;
 
-<?php if(  trim($_SESSION['nm_setor']) == 'Quality management' || trim($_SESSION['nm_setor']) == 'Production overhead'){?>
+<?php if(  trim($_SESSION['nm_setor']) == 'Quality management' || trim($_SESSION['nm_setor']) == 'Production overhead'){
+
+    $conn->searchPallets($_POST['op']);
+    ?>
+				
 		<table border="1" width="70%" align="center" class="list issue-report">
 
 			<tr>
@@ -371,52 +377,52 @@ echo $conn->getOrderNo() . str_pad($i, 6, "0", STR_PAD_LEFT);
             <?php
         /* echo  "Quantidade de paletes = ".$conn->getQuantityPallet(); */
         for ($i = 0; $i <= $conn->getQuantityPallet() - 1; $i ++) { ?>                
+             
+            
+			
               <tr>
 				<td align="center"><?php echo $conn->getConfirmedNoPallet()[$i] ?></td>
 				<td align="center"><?php echo $conn->getConfirmedBoxQuantity()[$i] ?></td>
 				<td align="center"><?php echo $conn->getConfirmedLayerQuantity()[$i] ?></td>
 				<td align="center"><?php echo str_replace(',','.',number_format($conn->getConfirmedApprovedQuantity()[$i])) ?></td>
 				<td align="center">
-<!--     					<a -->
- <!--   					href="br.schott.com.views/viewCardConfirmedPrinted.php?op=<//?php// echo $conn->getOrderNo()?>&pallet_no=<//?php// echo $conn->getConfirmedNoPallet()[$i]?>&unity=<//?php// echo $conn->getLineNumber()[$i]?>"
-<!--     					target="_blank">imprimir ficha</a> -->
-				
-				<form id="form_paletes_bipados" name="form_paletes_bipados" action="../br.schott.com.views/viewCardConfirmedPrinted.php?op=<?php echo $conn->getOrderNo()?>&pallet_no=<?php echo $conn->getConfirmedNoPallet()[$i]?>&unity=<?php echo $conn->getLineNumber()[$i]?>" method="post" target="_blank" >
-					
-
-					<input type="hidden" id="idcustomer"     name="nmcustomer" value="<?php echo (int)$conn->getCodeCustomer()." - ".$conn->getCustomer();?>">
+			 
+			   
+			    <form method="get" action="../br.schott.com.views/viewCardConfirmedPrinted.php?op=<?php echo $conn->getOrderNo()?>&pallet_no=<?php echo $conn->getConfirmedNoPallet()[$i]?>&unity=<?php echo $conn->getLineNumber()[$i]?>" id="markedPallets" target="_blank">
+                    <input type="hidden" id="idcustomer"     name="nmcustomer" value="<?php echo (int)$conn->getCodeCustomer()." - ".$conn->getCustomer();?>">
+					<input type="hidden" id="idop" 	 name="nmop" value="<?php echo $conn->getOrderNo();?>">
 					<input type="hidden" id="idmaterial" 	 name="nmmaterial" value="<?php echo $conn->getMaterialNumber()." - ".$conn->getMaterialDescription();?>">
 					<input type="hidden" id="idmachine" 	 name="nmmachine" value="<?php echo $conn->getMachine();?>">	
 					<input type="hidden" id="idmaterialdesc" name="nmmaterialdesc" value="<?php echo $conn->getMaterialDesc();?>">	
 					<input type="hidden" id="iddeliverydate" name="nmdeliverydate" value="<?php echo $conn->getDeliveryDate();?>">
-								
 					<input type="hidden" id="idboxqty" name="nmboxqty" value="<?php echo $conn->getConfirmedBoxQuantity()[$i];?>">
 					<input type="hidden" id="idlayerqty" name="nmlayerqty" value="<?php echo $conn->getConfirmedLayerQuantity()[$i];?>">	
 					<input type="hidden" id="idpcsqty" name="nmpcsqty" value="<?php echo $conn->getConfirmedApprovedQuantity()[$i];?>">
 					<input type="hidden" id="idpcsperbox" name="nmpcsperbox" value="<?php echo $conn->getPiecesPerBox();?>">
 					<input type="hidden" id="idboxperlayer" name="nmboxperlayer" value="<?php echo $conn->getBoxPerLayer();?>">
 					<input type="hidden" id="idpalletquantity" name="nmpalletquantity" value="<?php echo $conn->getQuantityPallet();?>">
-					
 					<input type="hidden" id="idqtdematerial" name="nmqtdematerial" value="<?php echo $conn->getQuantityMaterial();?>">
 					<input type="hidden" id="idcoditem" 	 name="nmcoditem" value="<?php echo $codItem;?>">	
 					<input type="hidden" id="iddescitem" 	 name="nmdescitem" value="<?php echo $descItem;?>">	
 					<input type="hidden" id="idqtyitem" 	 name="nmqtyitem" value="<?php echo $qtyItem;?>">	
 					<input type="hidden" id="idunityitem" 	 name="nmunityitem" value="<?php echo $unityItem;?>">
-					
-			 <!--	<a href="br.schott.com.views/viewAllCardPredictedPrinted.php?op=<?//php //echo $conn->getOrderNo()?>" target="_blank">
-			  		Imprimir Todas</a>-->
-				    <input type="submit" value="Imprimir" >
-				   </form>
-				</td>
+					<input type="hidden" id="idlineitem" 	 name="nmlineitem" value="<?php echo $conn->getLineNumber()[$i];?>">
+					<input type="hidden" id="idpalletno" 	 name="nmpalletno" value="<?php echo $conn->getConfirmedNoPallet()[$i];?>">
+			   <input class="btnstyle" type="submit" value="Imprimir">
+			   </form>
+			   
+				</td> 
 				
 				<td align="center">
-			   <!-- Aplica a persistência caso o palete já esteja liberado-->
-			   <?php if($connPallet->SearchPallets($conn->getConfirmedNoPallet()[$i])){echo "<font color='green'><b>Liberado</b></font>";}else{?>
+			  
+			   <!-- Aplica a persistência caso o palete já esteja liberado 
+			        Dois botões invisiveis para acertar o tamanho da linha da tabela-->
+			   <?php if($connPallet->SearchPallets($conn->getConfirmedNoPallet()[$i])){echo "<button style='visibility: hidden;'>1</button><font color='green'><b>Liberado</b></font><button style='visibility: hidden;'>1</button>";}else{?>
 				<div id="liberar<?php echo $i?>">
 				    
-					<button id="<?php echo "btn".$i?>" name="<?php echo "btn".$i?>"	style="cursor:pointer;" target="_blank" 
-					onclick="SaveDataReleaseadPallet('<?php echo $conn->getOrderNo()?>','<?php echo $conn->getMachine()?>','<?php echo $conn->getMaterialNumber()?>','<?php echo str_replace('"','',$conn->getMaterialDesc())?>','<?php echo $conn->getConfirmedApprovedQuantity()[$i]?>','<?php echo $conn->getConfirmedNoPallet()[$i]?>','<?php echo $i?>');"> 
+					<button class="btnstyle" id="<?php echo "btn".$i?>" name="<?php echo "btn".$i?>"	style="cursor:pointer;" target="_blank" onclick="SaveDataReleaseadPallet('<?php echo $conn->getOrderNo()?>','<?php echo $conn->getMachine()?>','<?php echo $conn->getMaterialNumber()?>','<?php echo str_replace('"','',$conn->getMaterialDesc())?>','<?php echo $conn->getConfirmedApprovedQuantity()[$i]?>','<?php echo $conn->getConfirmedNoPallet()[$i]?>','<?php echo $i?>');"> 
 					Liberar</button>
+					
 				</div>
 				<?php }?>
 				</td>
@@ -424,10 +430,6 @@ echo $conn->getOrderNo() . str_pad($i, 6, "0", STR_PAD_LEFT);
             <?php } ?>         
                         <tr>
 
-
-				<!-- <td align="center" colspan="6"> -->
-					<!-- <a href="br.schott.com.views/viewAllCardConfirmedPrinted.php?op=// echo $conn->getOrderNo()?>"  target="_blank">Imprimir Todas</a> -->
-				<!--   -->
 			</tr>
 			
 		</table>
@@ -442,5 +444,11 @@ echo $conn->getOrderNo() . str_pad($i, 6, "0", STR_PAD_LEFT);
 
 
 ?>
+
+
+           
+         
+
+
 <script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
 <script src="js/SearchPido.js" type="text/javascript"></script>
