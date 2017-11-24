@@ -833,7 +833,7 @@ input.autocomplete.ajax-loading {
 div.flash {margin-top: 8px;}
 
 div.flash.error, #errorExplanation {
-  background: url(../images/exclamation.png) 8px 50% no-repeat;
+  background: url(../../../../Images/exclamation.png) 8px 50% no-repeat;
   background-color: #ffe3e3;
   border-color: #d88;
   color: #880000;

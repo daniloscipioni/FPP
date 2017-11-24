@@ -442,21 +442,24 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
         
     }
     
-    function InsertGeneratedPallet($order,$machine,$material,$materialDesc,$quantity,$pallet)
+    function InsertGeneratedPallet($order,$machine,$material,$materialDesc,$quantity,$pallet,$boxqty,$trayqty)
     {
         $sql = '';
         $arrquantity = explode(';', $quantity);
         $arrpallet = explode(';', $pallet);
+        $arrboxqty = explode(';', $boxqty);
+        $arrtrayqty = explode(';', $trayqty);
         
 
         for ($i=0; $i<count($arrpallet)-1;$i++){
         
-        $sql.= "INSERT INTO data.tbl_fpp_generated_card(order_no, machine , prod_sap, desc_prod_sap,qty_pieces_palete, pallet_no,resp_generated,card_generated,pallet_removed,pallet_released,status)
-                VALUES ('$order', '$machine', $material, '$materialDesc', $arrquantity[$i],'$arrpallet[$i]','$_SESSION[cd_user]',TRUE,FALSE,FALSE,'1');";
+        $sql.= "INSERT INTO data.tbl_fpp_generated_card(order_no, machine , prod_sap, desc_prod_sap,qty_pieces_palete,qty_box_palete,qty_tray_box, pallet_no,resp_generated,card_generated,pallet_removed,pallet_released,status)
+                VALUES ('$order', '$machine', $material, '$materialDesc', $arrquantity[$i],$arrboxqty[$i],$arrtrayqty[$i],'$arrpallet[$i]','$_SESSION[cd_user]',TRUE,FALSE,FALSE,'1');";
        
         } 
         
-
+        
+        
         $conn = new Connect_ReleasedPallets();
         
         $conn->open();
@@ -762,7 +765,7 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
 		       EXTRACT(DAYS FROM (current_timestamp-date_generated)) as daysleep,
 		       EXTRACT(HOURS FROM (current_timestamp-date_generated)) as hoursleep,
 		       EXTRACT(MINUTES FROM (current_timestamp-date_generated)) as minutesleep
-               FROM data.tbl_fpp_generated_card WHERE card_generated is true and pallet_released is false ORDER BY timesleep DESC";
+               FROM data.tbl_fpp_generated_card WHERE card_generated is true and pallet_released is false and status = '1' ORDER BY timesleep DESC";
         
         $conn = new Connect_ReleasedPallets();
         
@@ -927,6 +930,33 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
         $sql = "SELECT 1 FROM data.tbl_fpp_generated_card WHERE pallet_no ='$pallet' and pallet_released is true;";
         
         
+        $conn = new Connect_ReleasedPallets();
+        
+        $conn->open();
+        
+        $query = pg_query($sql);
+        
+        $this->num_rows = pg_num_rows($query);
+        
+        return $this->num_rows;
+        
+        $conn->close();
+        
+    }
+    
+   
+    
+    /**
+     * @param unknown $order retorna '1' se encontrar a ordem pesquisada e 
+     *                       retorna '0' caso não existir a order ou já tiver sido liberada ou se já tiver sido cancelada
+     * @return number
+     */
+    function SearchOrderDB($order)
+    {
+        $sql = "select distinct 1 from data.tbl_fpp_generated_card WHERE order_no='$order' and status = '1' 
+                and (select count(order_no) from data.tbl_fpp_generated_card WHERE order_no='$order' and pallet_released is true )=0";
+        
+
         $conn = new Connect_ReleasedPallets();
         
         $conn->open();

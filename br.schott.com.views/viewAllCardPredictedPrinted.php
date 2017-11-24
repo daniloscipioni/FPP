@@ -1,7 +1,7 @@
 <?php
 /* NÃO REMOVER LINHAS VAZIAS PARA DEIXAR PADRONIZADAS COM AS OUTRAS PÁGINAS DE IMPRESSÃO */
 //session_start();
-header('Content-type: text/html; charset=ISO-8859-1');
+header('Content-type: text/html; charset=ISO-8859-1; <link rel="shortcut icon" href="../Images/fpp.png"/>');
 date_default_timezone_set("America/Sao_Paulo");
 setlocale(LC_ALL, 'pt_BR');
 
@@ -37,6 +37,7 @@ $quantityMaterial = $nmqtdematerial;
 $pdf = new PDF_Code39('P','mm',array(210,297)); // P = Portrait, em milimetros, e A4 (210x297)
 $pdf->SetMargins(7, 6, 10); 
 $pdf->SetTitle('FPP - Print');
+
 
 for($j=1;$j< $PredictedQuantity+1;$j++){
 
@@ -138,7 +139,7 @@ for($j=1;$j< $PredictedQuantity+1;$j++){
  
     $pdf->SetFont('Calibri','',12);
 
-     for($i=0; $i<$quantityMaterial;$i++){
+     for($i=0; $i< $quantityMaterial ;$i++){
         if(isset($arrcodItem[$i])){
             $pdf->Cell(191.5,$height,$arrcodItem[$i].' - '.utf8_decode($arrdescItem[$i]),1,1,'L',0);
         }else{$pdf->Cell(191.5,$height,'',1,1,'L',0); }
@@ -160,10 +161,11 @@ for($j=1;$j< $PredictedQuantity+1;$j++){
     $pdf->SetFont('Arial','', 10);
     $pdf->Cell(191.5,$height,$restInformation,1,1,'L',0);
     $pdf->Cell(191.5,$height,'',1,1,'L',0);
+    if($quantityMaterial<6){
     $pdf->Cell(191.5,$height,'',1,1,'L',0);
     $pdf->Cell(191.5,$height,'',1,1,'L',0);
     //$pdf->Cell(191.5,$height,'',1,1,'L',0);
-       
+    }  
     
     $pdf->ln($space);
     $x = $pdf->GetX();

@@ -8,13 +8,13 @@ if (!isset($_SESSION['id_user'])) {
 } 
 
 if( $_SESSION['nm_setor'] == 'Quality management'){
-    $tabName = "Libera√ß√£o Qualidade";
+    $tabName = "LiberaÁ„o Qualidade";
 }elseif ($_SESSION['nm_setor'] == 'Production planning')
 {
-    $tabName = "Impress√£o PCP";
+    $tabName = "Impress„o PCP";
 }elseif ($_SESSION['nm_setor'] == 'Production overhead')
 {
-    $tabName = "Impress√£o ADM";
+    $tabName = "Impress„o ADM";
 }
 
 
@@ -100,7 +100,7 @@ if( $_SESSION['nm_setor'] == 'Quality management'){
         
 <h2>Ficha de Produto em Processo</h2>
 
-
+   <div id="return_result" align="center" valign="center">  </div>
 <!-- <div class="splitcontentleft">-->
 <div id="cancel-order"> 
             <div id="login-form"> 
@@ -115,9 +115,7 @@ if( $_SESSION['nm_setor'] == 'Quality management'){
 <!-- </div>
 
 <div class="splitcontentright"> -->
-    <div id="return_result" align="center" valign="center">
-
-    </div>
+  
 <!-- </div> -->
 
 
@@ -139,7 +137,7 @@ if( $_SESSION['nm_setor'] == 'Quality management'){
         Developed by <a href="http://www.schott.com/brazil/portuguese/">Schott Brasil</a> &copy; 2017-2017 Danilo Scipioni
       </div>
       <div class="bgr">
-       	Vers√£o 1.0
+       	Vers„o 1.0
       </div>
   </div>
 </div>

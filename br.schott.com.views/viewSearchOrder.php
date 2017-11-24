@@ -1,5 +1,6 @@
 <?php 
 session_start();
+set_time_limit(0);
 header('Content-type: text/html; charset=UTF-8');
 
 if (!isset($_SESSION['id_user'])) {
@@ -82,8 +83,9 @@ if( $_SESSION['nm_setor'] == 'Quality management'){
 
 	<li><a class="overview selected" href="#"><?php echo $tabName?></a></li>
 	<li><a class="issues" href="viewStatusPallet.php">Status</a></li>
+	<?php if($_SESSION['nm_setor']  != "Quality management"){?>
 	<li><a class="issues" href="viewCancelOrder.php">Cancelamento de Palete</a></li>
-
+    <?php }?>
 	</ul>
 </div>
 </div>

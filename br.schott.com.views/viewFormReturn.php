@@ -1,26 +1,72 @@
 <?php
+set_time_limit(0);
 date_default_timezone_set("America/Sao_Paulo");
 setlocale(LC_ALL, 'pt_BR');
 //resolve problema de $_SESSION
 header('P3P:CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"');
 use Connection\Connection;
 use Util\Util;
+use Connection\connection_materials;
 //use Util\Util;
 require '../br.schott.com.connection/access.php';
 $connPallet = new Access_ReleasedPallets();
+$conn = new connection();
 require '../br.schott.com.util/Util.php';
 
  $util = new Util();
  $util->setOp($_POST['op']);
 
- $conn = new connection();
- //$conn->searchOP($util->getOp());
- $conn->searchOP($_POST['op']);
- 
+
 // $conn->searchMaterials($util->getOp());
- $conn->searchMaterials($_POST['op']);
+
  
  //$conn->searchPallets($util->getOp());
+  //$conn->searchOP($util->getOp());
+ $conn->searchMaterials($_POST['op']);
+// $conn->searchOP($_POST['op']);
+ 
+/*ini  */
+ // Relatório no PIDO - DSCI_PPDS_FPA
+ $urlOp = 'http://10.20.26.28/CronetJVX//pido/getData?p_pido=50000000380&ORDER_NO=' .$_POST['op'] . '&p_crosscompany=0&p_format=JSON&p_querytimeout=30&p_userid=PIDO/PIDO@cronet_cpbritu1';
+ 
+ $ch = curl_init();
+ curl_setopt($ch, CURLOPT_URL,  $urlOp);
+ curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+ $output = curl_exec($ch);
+ curl_close($ch);
+ 
+ //echo "OUTPUT = " . var_dump($output)."<br>";
+ $jsonStr = json_decode($output, true);
+ $records = $jsonStr['collection'];
+ 
+ $orderNo = $records[0]['ORDER_NO'];
+ $codeCustomer = (int)$records[0]['COD_CLIENTE'];
+ $customer = $records[0]['CLIENTE'];
+ $materialNumber = $records[0]['MATERIAL_NUM'];
+ $materialDescription = $records[0]['DESCRICAO'];
+ $materialDesc = $records[0]['MATERIAL_DESC'];
+  
+ /* Condicional verificar se a máquina foi programada para uma máquina diferente da máquina padrão, caso não foi programada, a variavel armazena a máquina padrão do produto */
+ if($records[0]['MAQUINA']!=null){
+     $machine = $records[0]['MAQUINA'];
+ }else{$machine = $records[0]['DEF_MAQUINA'];}
+ 
+ $descStatus = $records[0]['DESC_STATUS'];
+ $opQuantity = (int)$records[0]['QTDE_OP'];
+ $startDate =$records[0]['EARLIEST_DATA_INICIO'];
+ $producedPieces = $records[0]['PCS_PROD'];
+ $deliveryDate = $records[0]['DATA_ENTREGA'];
+ $quantityToProduce = $records[0]['QTDE_A_PROD'];
+ $boxPerLayer = (int) $records[0]['CXS_CAMADA'];
+ $boxPerPallet = (int) $records[0]['CXS_PALETE'];
+ $piecesPerPallet = $records[0]['PCS_PALETE'];
+ $quantityOfLayers = (int) $records[0]['QTDE_CAMADAS'];
+ $piecesPerBox = (int)$records[0]['PCS_CAIXA'];
+ $boxPredictedQuantity = $records[0]['QTDE_CAIXAS_PREV'];
+ $layerPredictedQuantity = (int)$records[0]['QTDE_CAMADAS_PREV'];
+ $palletPredictedQuantity = (int)$records[0]['QTDE_PALLET_PREV'];
+ 
+/* fim  */ 
  
 $verificationConfirmedPallet =  $connPallet->SearchPalletsConfirm($_POST['op']);
 
@@ -48,7 +94,7 @@ $verificationConfirmedPallet =  $connPallet->SearchPalletsConfirm($_POST['op']);
 <body>
 <?php if(($_SESSION['nm_setor'] == 'Production planning') || ($_SESSION['nm_setor'] == 'Production overhead')){ ?>
     <?php if($verificationConfirmedPallet){?>
-    <div class='painel' align='center' id='confirmGeneratedPalletInfo'>Os paletes desta ordem já foram confirmados</div>
+    <div class='flash notice' align='center' id='confirmGeneratedPalletInfo'>Os paletes desta ordem já foram confirmados</div>
     <?php }?>
 <?php }?>
 &nbsp;
@@ -65,11 +111,11 @@ $verificationConfirmedPallet =  $connPallet->SearchPalletsConfirm($_POST['op']);
         <table border="1" width="70%" align="center" class="list issue-report">
 			<tr>
 				<td colspan="2" align="left"><b>Cliente </b></td>
-				<td colspan="8" align="left"><?php echo (int)$conn->getCodeCustomer()." - ".$conn->getCustomer()?></td>
+				<td colspan="8" align="left"><?php echo $codeCustomer." - ".$customer?></td>
 			</tr>
 			<tr>
 				<td colspan="2" align="left"><b>Material </b></td>
-				<td colspan="8" align="left"><?php echo $conn->getMaterialNumber()." - ".$conn->getMaterialDescription()?></td>
+				<td colspan="8" align="left"><?php echo $materialNumber." - ".$materialDesc ?></td>
 			</tr>
 			
 		</table>
@@ -81,23 +127,23 @@ $verificationConfirmedPallet =  $connPallet->SearchPalletsConfirm($_POST['op']);
 			</tr>
 			<tr>
 
-				<td width="20%"><b>Máquina / Status: </b></td>
-				<td width="20%" align="left"><?php echo $conn->getMachine() ." - ".utf8_decode($conn->getDescStatus())?></td>
+				<td width="20%"><b>Máquina / Status </b></td>
+				<td width="20%" align="left"><?php echo $machine ." - ". utf8_decode($descStatus)?></td>
 				<td width="20%" colspan="2"><b>Quantidade da OP </b></td>
-				<td width="20%" align="left"><?php echo str_replace(',', '.', number_format($conn->getOpQuantity())) ?></td>
+				<td width="20%" align="left"><?php echo str_replace(',', '.', number_format($opQuantity)) ?></td>
 			</tr>
 			<tr>
-				<td width="20%"><b>Data de Início: </b></td>
-				<td width="10%" align="left"><?php echo $conn->getStartDate() ?></td>
+				<td width="20%"><b>Data de Início </b></td>
+				<td width="10%" align="left"><?php echo  date('d/m/Y', strtotime($startDate)) ?></td>
 				<td width="20%" colspan="2"><b>Quantidade Produzida</b></td>
-				<td width="20%" align="left"><?php echo $conn->getProducedPieces() ?></td>
+				<td width="20%" align="left"><?php echo str_replace(',', '.', number_format($producedPieces)) ?></td>
 
 			</tr>
 			<tr>
-				<td width="20%"><b>Data de Entrega: </b></td>
-				<td width="10%" align="left"><?php echo $conn->getDeliveryDate() ?></td>
+				<td width="20%"><b>Data de Entrega </b></td>
+				<td width="10%" align="left"><?php echo  date('d/m/Y', strtotime($deliveryDate)) ?></td>
 				<td width="20%" colspan="2"><b>Quantidade a Produzir</b></td>
-				<td width="20%" align="left"><?php echo $conn->getQuantityToProduce() ?></td>
+				<td width="20%" align="left"><?php echo str_replace(',', '.', number_format($quantityToProduce)) ?></td>
 			</tr>
 			
 		</table>
@@ -109,17 +155,17 @@ $verificationConfirmedPallet =  $connPallet->SearchPalletsConfirm($_POST['op']);
 			</tr>
 			<tr>
 				<td align="center"><b>Cx / Camada:</b></td>
-				<td align="center"><?php echo $conn->getBoxPerLayer() ?></td>
+				<td align="center"><?php echo $boxPerLayer ?></td>
 				<td align="center"><b>Cxs / Palete:</b></td>
-				<td align="center"><?php echo $conn->getBoxPerPallet() ?></td>
+				<td align="center"><?php echo $boxPerPallet ?></td>
 				<td rowspan="2" align="center"><b>Peças / Palete:</b></td>
-				<td rowspan="2" align="center"><?php echo $conn->getPiecesPerPallet() ?></td>
+				<td rowspan="2" align="center"><?php echo str_replace(',', '.', number_format($piecesPerPallet)) ?></td>
 			</tr>
 			<tr>
 				<td align="center"><b>Qtde Camadas:</b></td>
-				<td align="center"><?php echo $conn->getQuantityOfLayers() ?></td>
+				<td align="center"><?php echo $quantityOfLayers ?></td>
 				<td align="center"><b>Peças / Caixa:</b></td>
-				<td align="center"><?php echo $conn->getPiecesPerBox() ?></td>
+				<td align="center"><?php echo $piecesPerBox ?></td>
 			</tr>
 		
 		</table>
@@ -139,7 +185,7 @@ $verificationConfirmedPallet =  $connPallet->SearchPalletsConfirm($_POST['op']);
           
         <?php
         
-for ($i = 0; $i <= $conn->getQuantityMaterial() - 1; $i ++) {
+        for ($i = 0; $i <=  $conn->getQuantityMaterial()  - 1; $i ++) {
             if ($conn->getItemUnity()[$i] == 'KG') {
                 $quantity = str_replace('.', ',', str_replace(',', '', $conn->getItemQuantity()[$i]));
             } else {
@@ -179,9 +225,9 @@ for ($i = 0; $i <= $conn->getQuantityMaterial() - 1; $i ++) {
 				<td align="center"><b>Quantidade de camadas por Palete</b></td>
 			</tr>
 			<tr>
-				<td align="center"><?php echo str_replace(',','.',number_format($conn->getBoxPredictedQuantity()))?></td>
-				<td align="center"><?php echo $conn->getPalletPredictedQuantity()?></td>
-				<td align="center"><?php echo $conn->getLayerPredictedQuantity()?></td>
+				<td align="center"><?php echo $boxPredictedQuantity ?></td>
+				<td align="center"><?php echo $palletPredictedQuantity?></td>
+				<td align="center"><?php echo $layerPredictedQuantity?></td>
 			</tr>
 
 
@@ -204,14 +250,18 @@ for ($i = 0; $i <= $conn->getQuantityMaterial() - 1; $i ++) {
                     
                  <?php
         
-        $leftover = $conn->getBoxPredictedQuantity();
-        $total_op = $conn->getOpQuantity();
+        $leftover = $boxPredictedQuantity;
+        $total_op = $opQuantity;
         $rest = false;
-               
-        for ($i = 1; $i <= $conn->getPalletPredictedQuantity(); $i ++) {
-            $conn->setOpQuantity($total_op);
-            $piecesLeftover = $total_op;
+        
+       
+        
+        for ($i = 1; $i <= $palletPredictedQuantity; $i ++) {
+            $opQuantity = $total_op;
+            //$conn->setOpQuantity($total_op);
             
+            $piecesLeftover = $total_op;
+           
             ?>     
                    
                    
@@ -220,10 +270,10 @@ for ($i = 0; $i <= $conn->getQuantityMaterial() - 1; $i ++) {
 				<td align="center">
                         	<?php
             
-echo $conn->getOrderNo() . str_pad($i, 6, "0", STR_PAD_LEFT);
+echo $orderNo . str_pad($i, 6, "0", STR_PAD_LEFT);
             
-            $predicatedInformation[$i]['num_palete'] = $conn->getOrderNo() . str_pad($i, 6, "0", STR_PAD_LEFT);
-            $numPalete .=  $conn->getOrderNo() . str_pad($i, 6, "0", STR_PAD_LEFT).";";
+            $predicatedInformation[$i]['num_palete'] = $orderNo . str_pad($i, 6, "0", STR_PAD_LEFT);
+            $numPalete .=  $orderNo . str_pad($i, 6, "0", STR_PAD_LEFT).";";
             
             ?>
                         </td>
@@ -234,17 +284,20 @@ echo $conn->getOrderNo() . str_pad($i, 6, "0", STR_PAD_LEFT);
                             <?php
             
             // Compara se a sobra da quantidade de caixas é maior que a quantidade total de caixas por palete, caso seja verdadeiro. faz a redução da quantidade total de caixas pela quantidade de caixas por palete.
-            if ($leftover > $conn->getBoxPerPallet()) {
-                $predicatedBoxQuantity = $util->calcPredicatedBox($conn->getlayerPredictedQuantity(), $conn->getBoxPerLayer(), $conn->getPiecesPerBox()) / $conn->getPiecesPerBox();
+            if ($leftover > $boxPerPallet) {
+                
+                $predicatedBoxQuantity = $util->calcPredicatedBox($layerPredictedQuantity, $boxPerLayer, $piecesPerBox) / $piecesPerBox;
+                echo $predicatedBoxQuantity;
                 // Exibe a quantidade de caixas previstas
                 $predicatedBoxQuantityLeftover = $predicatedBoxQuantity - floor($predicatedBoxQuantity);
-                echo $predicatedBoxQuantity;
+                
                 $qtdeCaixa .= $predicatedBoxQuantity.";";
                 $predicatedInformation[$i]['qtde_caixa'] = $predicatedBoxQuantity;
                 
             } else {
-                $predicatedBoxQuantity = $conn->getOpQuantity() / $conn->getPiecesPerBox();
+                $predicatedBoxQuantity = $opQuantity / $piecesPerBox;
                 echo floor($predicatedBoxQuantity);
+                
                 $qtdeCaixa .= floor($predicatedBoxQuantity).";";
                 $predicatedInformation[$i]['qtde_caixa'] = floor($predicatedBoxQuantity);
                 
@@ -254,7 +307,7 @@ echo $conn->getOrderNo() . str_pad($i, 6, "0", STR_PAD_LEFT);
                 }
             }
             // Recebe o valor da sobra de caixas deduzindo do total de caixas
-            $leftover = $util->leftover($leftover, $conn->getBoxPerPallet());
+            $leftover = $util->leftover($leftover, $boxPerPallet);
             ?>
                         </td>
 				<!-- -- -->
@@ -262,9 +315,9 @@ echo $conn->getOrderNo() . str_pad($i, 6, "0", STR_PAD_LEFT);
 				<!--Qtde Camadas-->
 				<td align="center">
                             <?php
-                            echo $util->calcPredicatedLayers($predicatedBoxQuantity, $conn->getBoxPerLayer());
-                            $predicatedInformation[$i]['qtde_camadas'] = $util->calcPredicatedLayers($predicatedBoxQuantity, $conn->getBoxPerLayer());
-                            $qtdeCamadas .= $util->calcPredicatedLayers($predicatedBoxQuantity, $conn->getBoxPerLayer()).";";
+                            echo $util->calcPredicatedLayers($predicatedBoxQuantity, $boxPerLayer);
+                            $predicatedInformation[$i]['qtde_camadas'] = $util->calcPredicatedLayers($predicatedBoxQuantity, $boxPerLayer);
+                            $qtdeCamadas .= $util->calcPredicatedLayers($predicatedBoxQuantity, $boxPerLayer).";";
                             ?>                
                  </td>
 				<!-- -- -->
@@ -273,7 +326,7 @@ echo $conn->getOrderNo() . str_pad($i, 6, "0", STR_PAD_LEFT);
 				<td align="center">
                             <?php
             
-                            $predicatedBoxQuantityPieces = $util->calcPredicatedBox($conn->getlayerPredictedQuantity(), $conn->getBoxPerLayer(), $conn->getPiecesPerBox());
+                            $predicatedBoxQuantityPieces = $util->calcPredicatedBox($layerPredictedQuantity, $boxPerLayer, $piecesPerBox);
             
             if ($predicatedBoxQuantityPieces < $piecesLeftover) {
                 $total_op = $piecesLeftover - $predicatedBoxQuantityPieces;
@@ -299,8 +352,8 @@ echo $conn->getOrderNo() . str_pad($i, 6, "0", STR_PAD_LEFT);
 				</td>-->
 			</tr> 
                     <?php
-            $_SESSION['rest'] = round($predicatedBoxQuantityLeftover * $conn->getPiecesPerBox());
-            $rest = round($predicatedBoxQuantityLeftover * $conn->getPiecesPerBox());
+            $_SESSION['rest'] = round($predicatedBoxQuantityLeftover * $piecesPerBox);
+            $rest = round($predicatedBoxQuantityLeftover * $piecesPerBox);
         } else {
             unset($_SESSION['rest']);
         }
@@ -314,26 +367,24 @@ echo $conn->getOrderNo() . str_pad($i, 6, "0", STR_PAD_LEFT);
 				
 			
 					<td align="center"  colspan="4">
-			 <form action="../br.schott.com.views/viewAllCardPredictedPrinted.php?op=<?php echo $conn->getOrderNo()?>" method="post" target="_blank" id="predictedPallets"> 
+			 <form action="../br.schott.com.views/viewAllCardPredictedPrinted.php?op=<?php echo $orderNo?>" method="POST" target="_blank" id="predictedPallets"> 
 					
-					<input type="hidden" id="idmachine" 	 name="nmmachine" value="<?php echo $conn->getMachine();?>">
-					<input type="hidden" id="idop" 	 	name="nmop" value="<?php echo $conn->getOrderNo();?>">
+					<input type="hidden" id="idmachine" 	 name="nmmachine" value="<?php echo $machine;?>">
+					<input type="hidden" id="idop" 	 	     name="nmop" value="<?php echo $orderNo;?>">
 					<input type="hidden" id="idnumPalete"    name="nmnumPalete" value="<?php echo $numPalete;?>">
-					<input type="hidden" id="idcodmaterial"name="nmcodmaterial" value="<?php echo $conn->getMaterialNumber()?>">
-					<input type="hidden" id="iddescdmaterial"name="nmdescmaterial" value="<?php echo $conn->getMaterialDescription();?>">
+					<input type="hidden" id="idcodmaterial"  name="nmcodmaterial" value="<?php echo $materialNumber?>">
+					<input type="hidden" id="iddescdmaterial"name="nmdescmaterial" value="<?php echo $materialDescription;?>">
 					<input type="hidden" id="idqtdePecas"    name="nmqtdePecas" value="<?php echo $qtdePecas;?>">
-					
-					
-					<input type="hidden" id="idmaterial" 	 name="nmmaterial" value="<?php echo $conn->getMaterialNumber()." - ".$conn->getMaterialDescription();?>">
+					<input type="hidden" id="idmaterial" 	 name="nmmaterial" value="<?php echo $materialNumber." - ".$materialDescription;?>">
 					<input type="hidden" id="idqtdeCx"       name="nmqtdeCx" value="<?php echo $qtdeCaixa;?>">
 					<input type="hidden" id="idqtdeCmd"      name="nmqtdeCmd" value="<?php echo $qtdeCamadas;?>">
 					<input type="hidden" id="idrest" 		 name="nmrest" value="<?php echo $rest;?>">	
-					<input type="hidden" id="idcustomer"     name="nmcustomer" value="<?php echo (int)$conn->getCodeCustomer()." - ".$conn->getCustomer();?>">
-					<input type="hidden" id="idmaterialdesc" name="nmmaterialdesc" value="<?php echo $conn->getMaterialDesc();?>">	
-					<input type="hidden" id="iddeliverydate" name="nmdeliverydate" value="<?php echo $conn->getDeliveryDate();?>">
-					<input type="hidden" id="idquantity" 	 name="nmquantity" value="<?php echo $conn->getPalletPredictedQuantity();?>">	
-					<input type="hidden" id="idcxpercmd" 	 name="nmcxpercmd" value="<?php echo $conn->getBoxPerLayer();?>">	
-					<input type="hidden" id="idpcsperbox" 	 name="nmpcsperbox" value="<?php echo $conn->getPiecesPerBox();?>">	
+					<input type="hidden" id="idcustomer"     name="nmcustomer" value="<?php echo (int)$codeCustomer." - ".$customer;?>">
+					<input type="hidden" id="idmaterialdesc" name="nmmaterialdesc" value="<?php echo $materialDesc?>">	
+					<input type="hidden" id="iddeliverydate" name="nmdeliverydate" value="<?php echo date('d/m/Y', strtotime($deliveryDate));?>">
+					<input type="hidden" id="idquantity" 	 name="nmquantity" value="<?php echo $palletPredictedQuantity;?>">	
+					<input type="hidden" id="idcxpercmd" 	 name="nmcxpercmd" value="<?php echo $boxPerLayer;?>">	
+					<input type="hidden" id="idpcsperbox" 	 name="nmpcsperbox" value="<?php echo $piecesPerBox;?>">	
 					<input type="hidden" id="idqtdematerial" name="nmqtdematerial" value="<?php echo $conn->getQuantityMaterial();?>">
 					<input type="hidden" id="nmcoditem" 	 name="nmcoditem" value="<?php echo $codItem;?>">	
 					<input type="hidden" id="nmdescitem" 	 name="nmdescitem" value="<?php echo $descItem;?>">	
@@ -352,7 +403,7 @@ echo $conn->getOrderNo() . str_pad($i, 6, "0", STR_PAD_LEFT);
 		   <?php if(($_SESSION['nm_setor'] == 'Production planning') || ($_SESSION['nm_setor'] == 'Production overhead')){ ?>
 			    <?php if(!$verificationConfirmedPallet){?>
 <div align="right" id="confirmGeneratedPallet">
-		<button onclick="SaveDataGeneratedPallet('<?php echo $conn->getOrderNo();?>','<?php echo $conn->getMachine();?>','<?php echo $conn->getMaterialNumber()?>','<?php echo $conn->getMaterialDescription();?>','<?php echo $qtdePecas;?>','<?php echo $numPalete;?>');" class="confirm"> Confirmar</button>
+		<button onclick="SaveDataGeneratedPallet('<?php echo $orderNo ?>','<?php echo $machine ?>','<?php echo $materialNumber ?>','<?php echo $materialDescription ?>','<?php echo $qtdePecas;?>','<?php echo $numPalete;?>','<?php echo $qtdeCaixa;?>','<?php echo $qtdeCamadas?>');" class="confirm"> Confirmar</button>
 </div>		
                 <?php }?>
 		   <?php }?>
@@ -384,31 +435,34 @@ echo $conn->getOrderNo() . str_pad($i, 6, "0", STR_PAD_LEFT);
                         
             <?php
         /* echo  "Quantidade de paletes = ".$conn->getQuantityPallet(); */
-        for ($i = 0; $i <= $conn->getQuantityPallet() - 1; $i ++) { ?>                
+        for ($i = 0; $i <= $conn->getQuantityPallet() - 1; $i ++) { 
+
+            ?>                
              
             
 			
               <tr>
 				<td align="center"><?php echo $conn->getConfirmedNoPallet()[$i] ?></td>
-				<td align="center"><?php echo $conn->getConfirmedBoxQuantity()[$i] ?></td>
+				<td align="center"><?php echo $conn->getConfirmedBoxQuantity()[$i]  ?></td>
 				<td align="center"><?php echo $conn->getConfirmedLayerQuantity()[$i] ?></td>
 				<td align="center"><?php echo str_replace(',','.',number_format($conn->getConfirmedApprovedQuantity()[$i])) ?></td>
 				<td align="center">
 			 
 			   
-			    <form method="get" action="../br.schott.com.views/viewCardConfirmedPrinted.php?op=<?php echo $conn->getOrderNo()?>&pallet_no=<?php echo $conn->getConfirmedNoPallet()[$i]?>&unity=<?php echo $conn->getLineNumber()[$i]?>" id="markedPallets" target="_blank">
-                    <input type="hidden" id="idcustomer"     name="nmcustomer" value="<?php echo (int)$conn->getCodeCustomer()." - ".$conn->getCustomer();?>">
-					<input type="hidden" id="idop" 	 name="nmop" value="<?php echo $conn->getOrderNo();?>">
-					<input type="hidden" id="idmaterial" 	 name="nmmaterial" value="<?php echo $conn->getMaterialNumber()." - ".$conn->getMaterialDescription();?>">
-					<input type="hidden" id="idmachine" 	 name="nmmachine" value="<?php echo $conn->getMachine();?>">	
-					<input type="hidden" id="idmaterialdesc" name="nmmaterialdesc" value="<?php echo $conn->getMaterialDesc();?>">	
-					<input type="hidden" id="iddeliverydate" name="nmdeliverydate" value="<?php echo $conn->getDeliveryDate();?>">
+			    <form method="get" action="../br.schott.com.views/viewCardConfirmedPrinted.php?op=<?php echo $orderNo ?>&pallet_no=<?php echo $conn->getConfirmedNoPallet()[$i]?>&unity=<?php echo $conn->getLineNumber()[$i]?>" id="markedPallets" target="_blank">
+                    <input type="hidden" id="idcustomer"     name="nmcustomer" value="<?php echo (int)$codeCustomer." - ".$customer?>">
+					<input type="hidden" id="idCodeCustomer" name="nmcodecustomer" value="<?php echo (int)$codeCustomer ?>">
+					<input type="hidden" id="idop" 	 name="nmop" value="<?php echo $orderNo?>">
+					<input type="hidden" id="idmaterial" 	 name="nmmaterial" value="<?php echo $materialNumber." - ".$materialDescription;?>">
+					<input type="hidden" id="idmachine" 	 name="nmmachine" value="<?php echo $machine;?>">	
+					<input type="hidden" id="idmaterialdesc" name="nmmaterialdesc" value="<?php echo $materialDesc;?>">	
+					<input type="hidden" id="iddeliverydate" name="nmdeliverydate" value="<?php echo date('d/m/Y', strtotime($deliveryDate))?>">
 					<input type="hidden" id="idboxqty" name="nmboxqty" value="<?php echo $conn->getConfirmedBoxQuantity()[$i];?>">
 					<input type="hidden" id="idlayerqty" name="nmlayerqty" value="<?php echo $conn->getConfirmedLayerQuantity()[$i];?>">	
 					<input type="hidden" id="idpcsqty" name="nmpcsqty" value="<?php echo $conn->getConfirmedApprovedQuantity()[$i];?>">
-					<input type="hidden" id="idpcsperbox" name="nmpcsperbox" value="<?php echo $conn->getPiecesPerBox();?>">
-					<input type="hidden" id="idboxperlayer" name="nmboxperlayer" value="<?php echo $conn->getBoxPerLayer();?>">
-					<input type="hidden" id="idpalletquantity" name="nmpalletquantity" value="<?php echo $conn->getQuantityPallet();?>">
+					<input type="hidden" id="idpcsperbox" name="nmpcsperbox" value="<?php echo $piecesPerBox;?>">
+					<input type="hidden" id="idboxperlayer" name="nmboxperlayer" value="<?php echo $boxPerLayer;?>">
+					<input type="hidden" id="idpalletquantity" name="nmpalletquantity" value="<?php echo $palletPredictedQuantity?>">
 					<input type="hidden" id="idqtdematerial" name="nmqtdematerial" value="<?php echo $conn->getQuantityMaterial();?>">
 					<input type="hidden" id="idcoditem" 	 name="nmcoditem" value="<?php echo $codItem;?>">	
 					<input type="hidden" id="iddescitem" 	 name="nmdescitem" value="<?php echo $descItem;?>">	
@@ -425,12 +479,30 @@ echo $conn->getOrderNo() . str_pad($i, 6, "0", STR_PAD_LEFT);
 			  
 			   <!-- Aplica a persistência caso o palete já esteja liberado 
 			        Dois botões invisiveis para acertar o tamanho da linha da tabela-->
-			   <?php if($connPallet->SearchPalletsDB($conn->getConfirmedNoPallet()[$i])){echo "<button style='visibility: hidden;'>1</button><font color='green'><b>Liberado</b></font><button style='visibility: hidden;'>1</button>";}else{?>
+			   <?php if($connPallet->SearchPalletsDB($conn->getConfirmedNoPallet()[$i]))
+			         {
+			             echo "<button style='visibility: hidden;'>1</button><font color='green'><b>Liberado</b></font><button style='visibility: hidden;'>1</button>";
+			         }else
+			                {?>
 				<div id="liberar<?php echo $i?>">
-				    
+				   <!-- Condicionais referentes a comparação de quantidade do que foi previsto com o que foi bipado -->
+				    <?php if(($conn->getConfirmedBoxQuantity()[$i] == $conn->getQtyboxpalete()[$i+1]) 
+    				          || ($conn->getConfirmedLayerQuantity()[$i] == $conn->getQtytraybox()[$i+1]) 
+				        || ($i == $palletPredictedQuantity)
+				        )
+    				          {
+    				              if (
+    				                     (substr($conn->getConfirmedNoPallet()[$i],-3,3)=='100')
+    				                  || (substr($conn->getConfirmedNoPallet()[$i],-3,3)=='101')
+    				                  || (substr($conn->getConfirmedNoPallet()[$i],-3,3)=='102')
+    				                  || (substr($conn->getConfirmedNoPallet()[$i],-3,3)=='103')
+    				                  )
+    				          ?>
 					<button class="btnstyle" id="<?php echo "btn".$i?>" name="<?php echo "btn".$i?>" style="cursor:pointer;" target="_blank" onclick="UpdateDataReleaseadPallet('<?php echo $conn->getOrderNo()?>','<?php echo $conn->getMachine()?>','<?php echo $conn->getMaterialNumber()?>','<?php echo str_replace('"','',$conn->getMaterialDesc())?>','<?php echo $conn->getConfirmedApprovedQuantity()[$i]?>','<?php echo $conn->getConfirmedNoPallet()[$i]?>','<?php echo $i?>');"> 
 					Liberar</button>
-					
+					<?php }else{?>
+					<div><span><img alt="exclamation" src="../Images/exclamation.png" height="18" width="18" title="Quantidade de caixas ou quantidade de camadas diferente da ficha impressa"></span></div>
+					<?php }?>
 				</div>
 				<?php }?>
 				</td>

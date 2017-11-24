@@ -1,11 +1,14 @@
 <?php
 namespace Connection;
-
+ini_set("max_execution_time",0 ); 
 error_reporting(0);
 ini_set('display_errors', FALSE);
 
 header('Content-type: text/html; charset=ISO-8859-1');
 
+Class connection_materials{
+
+}
 
 class connection /* Conexão com o PIDO e retorno JSON*/
 {
@@ -89,6 +92,15 @@ class connection /* Conexão com o PIDO e retorno JSON*/
     private $quantityPallet;
     
     private $lineNumber;
+    
+    private $quantityPalletDB;
+    
+    private $palletno;
+    
+    private $qtyboxpalete;
+    
+    private $qtytraybox;
+
     
     /* Search PalletNo*/
     
@@ -376,6 +388,46 @@ class connection /* Conexão com o PIDO e retorno JSON*/
         $this->errorMessage = $errorMessage;
     }
        
+    /**
+     * @return the $quantityPalletDB
+     */
+    public function getQuantityPalletDB()
+    {
+        return $this->quantityPalletDB;
+    }
+
+    /**
+     * @return the $palletno
+     */
+    public function getPalletno()
+    {
+        return $this->palletno;
+    }
+
+    /**
+     * @return the $qtyboxpalete
+     */
+    public function getQtyboxpalete()
+    {
+        return $this->qtyboxpalete;
+    }
+
+    /**
+     * @return the $qtytraybox
+     */
+    public function getQtytraybox()
+    {
+        return $this->qtytraybox;
+    }
+
+    /**
+     * @param field_type $quantityPalletDB
+     */
+    public function setQuantityPalletDB($quantityPalletDB)
+    {
+        $this->quantityPalletDB = $quantityPalletDB;
+    }
+
     /* Search Pallets*/
     
     
@@ -522,27 +574,40 @@ class connection /* Conexão com o PIDO e retorno JSON*/
         return $this->quantityPalletNo;
     }
     
-
+   
     /* Busca informações da OP */
     function searchOP($op)
     {
         
         // Relatório no PIDO - DSCI_PPDS_FPA
-        $urlOp = 'http://10.20.26.28/CronetJVX//pido/getData?p_pido=50000000380&ORDER_NO=' . $op . '&p_crosscompany=0&p_format=JSON&p_querytimeout=60&p_userid=' . $this->getLogin() . '@cronet_cpbritu1';
+        $urlOp = 'http://10.20.26.28/CronetJVX//pido/getData?p_pido=50000000380&ORDER_NO=' . $op . '&p_crosscompany=0&p_format=JSON&p_querytimeout=30&p_userid=' . $this->getLogin() . '@cronet_cpbritu1';
         
-        $jsonFile = file_get_contents($urlOp);
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL,  $urlOp);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $output = curl_exec($ch);
+        curl_close($ch);
+      // echo "SAIDA = ". $output;
+       // return $output;
+
+        echo "OUTPUT = " .  var_dump($output)."<br>";
+       $jsonStr = json_decode($output, true);
+       $records = $jsonStr['collection'];
+      // echo "RECORDS = " .  var_dump($records)."<br>";
+       /*  $jsonFile = file_get_contents($urlOp);
         $jsonStr = json_decode($jsonFile, true);
         $records = $jsonStr['collection'];
-        
-        
-        if($records!=null){
+       
+  
+        if($records!=null){ */
         $this->orderNo = $records[0]['ORDER_NO'];
-        $this->codeCustomer = $records[0]['COD_CLIENTE'];
-        $this->customer = $records[0]['CLIENTE'];
-        $this->materialNumber = $records[0]['MATERIAL_NUM'];
-        $this->materialDescription = $records[0]['DESCRICAO'];
-        $this->materialDesc = $records[0]['MATERIAL_DESC'];
         
+       $this->codeCustomer = $records[0]['COD_CLIENTE'];
+       $this->customer = $records[0]['CLIENTE'];
+       $this->materialNumber = $records[0]['MATERIAL_NUM'];
+       $this->materialDescription = $records[0]['DESCRICAO'];
+       $this->materialDesc = $records[0]['MATERIAL_DESC'];
+      
         if($records[0]['MAQUINA']!=null){
         $this->machine = $records[0]['MAQUINA'];
         }else{$this->machine = $records[0]['DEF_MAQUINA'];}
@@ -550,9 +615,6 @@ class connection /* Conexão com o PIDO e retorno JSON*/
         $this->descStatus = $records[0]['DESC_STATUS'];
         $this->opQuantity = (int)$records[0]['QTDE_OP'];
         
-//         if($records[0]['DATA_INICIO']!=null){
-//         $this->startDate = date('d/m/Y', strtotime($records[0]['DATA_INICIO']));
-//         }else{$this->startDate = date('d/m/Y', strtotime($records[0]['DEF_DATA_INICIO']));}
         $this->startDate = date('d/m/Y', strtotime($records[0]['EARLIEST_DATA_INICIO']));
         $this->producedPieces = str_replace(',', '.', number_format($records[0]['PCS_PROD']));
         $this->deliveryDate = date('d/m/Y', strtotime($records[0]['DATA_ENTREGA']));
@@ -565,24 +627,46 @@ class connection /* Conexão com o PIDO e retorno JSON*/
         $this->boxPredictedQuantity = $records[0]['QTDE_CAIXAS_PREV'];
         $this->layerPredictedQuantity = (int)$records[0]['QTDE_CAMADAS_PREV'];
         $this->palletPredictedQuantity = (int)$records[0]['QTDE_PALLET_PREV'];
-        }else{$this->setErrorMessage(1);}
-        
+        }//else{$this->setErrorMessage(1);} 
 
-    }
 
     /* Busca informações de paletes bipados por OP */
-    function searchPallets($op)
+    function searchPallets($order)
     {
         
+         $sql = "select pallet_no,qty_box_palete,qty_tray_box from data.tbl_fpp_generated_card WHERE order_no = '$order';";
+         
+         $conn = new Connect_ReleasedPallets();
+         
+         $conn->open();
+         
+         $query = pg_query($sql);
+         
+         $this->setQuantityPalletDB(pg_num_rows($query));
+         
+         $this->num_rows = pg_num_rows($query);
+         
+         $i = 1;
+         while ($row = pg_fetch_array($query)) {
+             
+             $this->palletno[$i] = $row['pallet_no'];
+             $this->qtyboxpalete[$i] = $row['qty_box_palete'];
+             $this->qtytraybox[$i] = $row['qty_tray_box'];
+             $i ++;
+             
+         }
+         
+         $conn->close();
+        
+        
+        
         // Relatório no PIDO - DSCI_liberacao_pallet_FPA
-        $urlPallets = 'http://10.20.26.28/CronetJVX//pido/getData?p_pido=50000000435&ORDER_NO=' . $op . '&p_crosscompany=1&p_format=JSON&p_querytimeout=30&p_userid=' . $this->getLogin() . '@cronet_cpbritu1';
+        $urlPallets = 'http://10.20.26.28/CronetJVX//pido/getData?p_pido=50000000435&ORDER_NO=' . $order . '&p_crosscompany=1&p_format=JSON&p_querytimeout=30&p_userid=' . $this->getLogin() . '@cronet_cpbritu1';
         
         $jsonFile = file_get_contents($urlPallets);
         $jsonStr = json_decode($jsonFile, true);
         $records = $jsonStr['collection'];
         
-        
-
         $this->setQuantityPallet(count($records));
         
         foreach ($records as $confirmedBoxPerLayer){

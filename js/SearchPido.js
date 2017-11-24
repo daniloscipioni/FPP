@@ -45,16 +45,21 @@ function SearchPido()
 
 function CancelOrder(order)
 {
-	if (window.confirm(unescape("Deseja realmente cancelar as etiquetas da ordem de produção "+order +" ?"))) {				
+	if (window.confirm(unescape("Deseja realmente cancelar as fichas da ordem de produ\u00e7\u00e3o "+ order +"?"))) {				
 	$.post('../br.schott.com.util/CancelGeneratedOrder.php',
         {
             order:        $("#txt_cancel_order").val(),
          
-        }
+        }, function(data) {
+			$("#return_result").html(data);
+		}   
          
-         )   
+         )
+        $("#txt_cancel_order").val(''); 
+          
 	}
 }
+
 function SearchReleasedPallets()
 {
 	var msg = "Buscando Paletes Liberados";
@@ -158,12 +163,12 @@ function MarkPallet(palletSelected)
 				
 }
 
-function closePrint () {
+function closePrint() {
 	  document.body.removeChild(this.__container__);
 	  
 	}
 
-function setPrint () {
+function setPrint() {
 	  this.contentWindow.__container__ = this;
 	  this.contentWindow.onbeforeunload = closePrint;
 	  this.contentWindow.onafterprint = closePrint;
@@ -188,17 +193,19 @@ function printPage (sURL) {
 
 	}
 
-function SaveDataGeneratedPallet(order,machine,material,materialDesc,quantity,pallet) {
-	if (window.confirm(unescape("Confirmar a geração dos paletes da OP "+ order +" ?"))) {				
+function SaveDataGeneratedPallet(order,machine,material,materialDesc,quantity,pallet,boxqty,trayqty) {
+	if (window.confirm("Confirmar a gera\u00e7\u00e3o dos paletes da OP "+ order +" ?")) {				
 	$.post('../br.schott.com.util/SaveDataGeneratedPallet.php', {
 					order    : order,
 					machine    : machine,
 					material : material,
 					materialDesc : materialDesc,
 					quantity:quantity,
-					pallet: pallet
+					pallet: pallet,
+					boxqty:boxqty,
+					trayqty:trayqty
 				}, function(data) {
-					$("#confirmGeneratedPallet").html("<div class='painel' align='center'>Confirmado!</div>");
+					$("#confirmGeneratedPallet").html("<div class='flash notice' align='center'>Confirmado!</div>");
 					$("#return_result_data").html(data);
 				}
 	
