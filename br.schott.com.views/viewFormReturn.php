@@ -344,7 +344,7 @@ echo $orderNo . str_pad($i, 6, "0", STR_PAD_LEFT);
                 $qtdePecas .= str_replace(',', '.', number_format($piecesLeftover)).";";
             }
             ?>
-        		s		</td>
+        				</td>
 				<!-- -- -->
 			</tr>  
                  <?php }?>
