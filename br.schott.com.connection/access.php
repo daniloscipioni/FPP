@@ -54,6 +54,7 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
     public $num_rows;
     
     private $emission_date;
+    private $order_no;
     private $pallet_no;
     private $prod_sap;
     private $desc_prod_sap;
@@ -99,12 +100,9 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
     public $arrReleased;
     public $arrNotReleased;
     
-    
-    
-    
-    
-    
-    
+   
+
+
     /**
      * @return the $transfResp
      */
@@ -403,6 +401,14 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
     {
         return $this->paleteQty;
     }
+    
+    /**
+     * @return the $order_no
+     */
+    public function getOrder_no()
+    {
+        return $this->order_no;
+    }
 
     /**
      * @return the $pallet_no
@@ -615,7 +621,7 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
         $conn->close();
     }
     */
-    /*
+    
     function SearchNotReleased(){
         
         $sql = "SELECT pallet_no FROM data.tbl_fpp_released_pallets";
@@ -630,7 +636,7 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
        
         
         
-        /* Salva os valores dos paletes já liberados da consulta ao BD POSTGRES 
+        /* Salva os valores dos paletes já liberados da consulta ao BD POSTGRES */
         while ($row = pg_fetch_assoc($query)) {
             $this->ReleasedPalletNo[] = $row['pallet_no'];
         }
@@ -644,7 +650,7 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
         $records = $jsonStr['collection'];
 
         
-        /* Atribui os valores nos vetores da consulta ao relatório do PIDO  
+        /* Atribui os valores nos vetores da consulta ao relatório do PIDO */ 
           foreach ($records as $palletno){
             $this->notReleasedPalletNo[] = $palletno['NO_PALETE'];
           }
@@ -683,13 +689,13 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
          
 
         
-        /* Atribui os valores de número dos paletes liberados no vetor 
+        /* Atribui os valores de número dos paletes liberados no vetor */
          for($i = 0; $i<=$this->num_rows;$i++){
              $releasedPallet[] = trim($this->ReleasedPalletNo[$i]);
          }  
          
                 
-         /* Atribui os valores de paletes não liberados aos respectivos vetores  
+         /* Atribui os valores de paletes não liberados aos respectivos vetores  */
           for($i = 0; $i<=count($records);$i++){
               $noReleasedPallet[] = trim($this->notReleasedPalletNo[$i]);
               $noReleasedOrder[] = trim($this->notReleasedOrderNo[$i]);
@@ -702,15 +708,15 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
               $noReleasedCompletePalete[] = trim($this->notReleasedCompletePalete[$i]);             
           }   
     
-          /* Diferença entre vetores de paletes não liberados(do PIDO) e paletes liberados(do BD POSTGRES) 
+          /* Diferença entre vetores de paletes não liberados(do PIDO) e paletes liberados(do BD POSTGRES) */
           $ArrDiference = array_diff($noReleasedPallet,$releasedPallet);
           
 
-          /* Atribui os valores das variaveis da diferênça entre paletes liberados e paletes não liberados das ordens que estão rodando em máquinas   
+          /* Atribui os valores das variaveis da diferênça entre paletes liberados e paletes não liberados das ordens que estão rodando em máquinas   */
           foreach ($ArrDiference as $value){
          
               for($i = 0;$i<=count($noReleasedPallet);$i++){
-                  /* Verifica se o valor
+                  /* Verifica se o valor*/
                   if($value == $noReleasedPallet[$i]){
                       $this->AuxiliarNotReleasedPalletNo[] = $noReleasedPallet[$i];
                       $this->AuxiliarNotReleasedOrderNo[] = $noReleasedOrder[$i];
@@ -726,13 +732,12 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
              
           }  
       
-          /* Atribui a quantidade de itens a variavel que será usada na impressão do resultado  
+          /* Atribui a quantidade de itens a variavel que será usada na impressão do resultado  */
           $this->setNotReleasedQuantity(count($ArrDiference));
-          
+       
         
     }
-    */
-    
+        
     function CancelOrder($order){
         $sql = "UPDATE data.tbl_fpp_generated_card SET status = '0' where order_no = '$order';";
         
@@ -755,13 +760,14 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
     {
            
         $sql = "SELECT date_generated,
+                       order_no,
                        pallet_no,
                        machine,
                        prod_sap,
                        desc_prod_sap,
                        qty_pieces_palete,
                        resp_released,
-		       EXTRACT(DAYS FROM (current_timestamp-date_generated)) ||'dia(s) '|| EXTRACT(HOURS FROM (current_timestamp-date_generated))||'h '|| EXTRACT(MINUTES FROM (current_timestamp-date_generated))||'min ' timesleep,
+		       EXTRACT(DAYS FROM (current_timestamp-date_generated)) ||' dia(s) '|| EXTRACT(HOURS FROM (current_timestamp-date_generated))||'h '|| EXTRACT(MINUTES FROM (current_timestamp-date_generated))||'min ' timesleep,
 		       EXTRACT(DAYS FROM (current_timestamp-date_generated)) as daysleep,
 		       EXTRACT(HOURS FROM (current_timestamp-date_generated)) as hoursleep,
 		       EXTRACT(MINUTES FROM (current_timestamp-date_generated)) as minutesleep
@@ -779,6 +785,7 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
         while ($row = pg_fetch_array($query)) {
             
             $this->emission_date[$i] = date_create($row['date_generated']);
+            $this->order_no[$i]  = $row['order_no'];
             $this->pallet_no[$i] = $row['pallet_no'];
             $this->machine[$i] = $row['machine'];
             $this->paleteQty[$i] = $row['qty_pieces_palete'];
@@ -806,11 +813,11 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
                        desc_prod_sap,
                        qty_pieces_palete,
                        resp_released,
-		       EXTRACT(DAYS FROM (current_timestamp-date_released)) ||'dia(s) '|| EXTRACT(HOURS FROM (current_timestamp-date_released))||'h '|| EXTRACT(MINUTES FROM (current_timestamp-date_released))||'min ' timesleep,
+		       EXTRACT(DAYS FROM (current_timestamp-date_released)) ||' dia(s) '|| EXTRACT(HOURS FROM (current_timestamp-date_released))||'h '|| EXTRACT(MINUTES FROM (current_timestamp-date_released))||'min ' timesleep,
 		       EXTRACT(DAYS FROM (current_timestamp-date_released)) as daysleep,
 		       EXTRACT(HOURS FROM (current_timestamp-date_released)) as hoursleep,
 		       EXTRACT(MINUTES FROM (current_timestamp-date_released)) as minutesleep
-               FROM data.tbl_fpp_generated_card WHERE card_generated is true and pallet_released is true and pallet_removed is false ORDER BY timesleep DESC";
+               FROM data.tbl_fpp_generated_card WHERE card_generated is true and pallet_released is true and pallet_removed is false ORDER BY timesleep";
         
         $conn = new Connect_ReleasedPallets();
         
@@ -943,8 +950,6 @@ Class Access_ReleasedPallets extends Connect_ReleasedPallets{
         $conn->close();
         
     }
-    
-   
     
     /**
      * @param unknown $order retorna '1' se encontrar a ordem pesquisada e 

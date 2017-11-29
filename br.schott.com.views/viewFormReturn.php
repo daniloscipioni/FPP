@@ -6,7 +6,6 @@ setlocale(LC_ALL, 'pt_BR');
 header('P3P:CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"');
 use Connection\Connection;
 use Util\Util;
-use Connection\connection_materials;
 //use Util\Util;
 require '../br.schott.com.connection/access.php';
 $connPallet = new Access_ReleasedPallets();
@@ -94,7 +93,11 @@ $verificationConfirmedPallet =  $connPallet->SearchPalletsConfirm($_POST['op']);
 <body>
 <?php if(($_SESSION['nm_setor'] == 'Production planning') || ($_SESSION['nm_setor'] == 'Production overhead')){ ?>
     <?php if($verificationConfirmedPallet){?>
-    <div class='flash notice' align='center' id='confirmGeneratedPalletInfo'>Os paletes desta ordem já foram confirmados</div>
+    <div class='flash notice' align='center' id='confirmGeneratedPalletInfo'>Fichas já liberadas</div>
+    <script type="text/javascript">
+    $('#teste').removeClass('btnstyle');
+    $('#teste').addClass('btnstyledisable');
+    </script>
     <?php }?>
 <?php }?>
 &nbsp;
@@ -225,7 +228,7 @@ $verificationConfirmedPallet =  $connPallet->SearchPalletsConfirm($_POST['op']);
 				<td align="center"><b>Quantidade de camadas por Palete</b></td>
 			</tr>
 			<tr>
-				<td align="center"><?php echo $boxPredictedQuantity ?></td>
+				<td align="center"><?php echo str_replace(',', '.', number_format($boxPredictedQuantity)) ?></td>
 				<td align="center"><?php echo $palletPredictedQuantity?></td>
 				<td align="center"><?php echo $layerPredictedQuantity?></td>
 			</tr>
@@ -347,8 +350,8 @@ echo $orderNo . str_pad($i, 6, "0", STR_PAD_LEFT);
                  <?php }?>
                     <?php if($rest == true) {?>
                     <tr>
-				<!--<td align="center" colspan="4">
-				  Sobra de 1 Caixa com: <?php //echo round($predicatedBoxQuantityLeftover*$conn->getPiecesPerBox());?> Peças
+				<!-- <td align="center" colspan="4"> 
+				  Sobra de 1 Caixa com: </?php echo round($predicatedBoxQuantityLeftover*$piecesPerBox);?> Peças
 				</td>-->
 			</tr> 
                     <?php
@@ -391,22 +394,19 @@ echo $orderNo . str_pad($i, 6, "0", STR_PAD_LEFT);
 					<input type="hidden" id="nmqtyitem" 	 name="nmqtyitem" value="<?php echo $qtyItem;?>">	
 					<input type="hidden" id="nmunityitem" 	 name="nmunityitem" value="<?php echo $unityItem;?>">
 					
-			   <a class="btnstyle" onClick="document.getElementById('predictedPallets').submit();" target="_blank">imprimir</a>
+			   <button class="btnstyle" onClick="document.getElementById('predictedPallets').submit();" target="_blank">Visualizar</button>
 				<!-- Botão não visivel para que o botão caiba na linha da tabela -->
-			   <button style="visibility: hidden">1</button>
+    		   <button id="teste" class="btnstyle" onClick="if (window.confirm('Deseja liberar fichas?')) {document.getElementById('predictedPallets').submit();SaveDataGeneratedPallet('<?php echo $orderNo ?>','<?php echo $machine ?>','<?php echo $materialNumber ?>','<?php echo $materialDescription ?>','<?php echo $qtdePecas;?>','<?php echo $numPalete;?>','<?php echo $qtdeCaixa;?>','<?php echo $qtdeCamadas?>');$(this).removeClass('btnstyle');$(this).addClass('btnstyledisable');}" target="_blank">Liberar</button>
 			
+			
+			<button style="visibility: hidden">1</button>
 			</form>			
 	</td>		
 			</tr>
 		
 		</table>
-		   <?php if(($_SESSION['nm_setor'] == 'Production planning') || ($_SESSION['nm_setor'] == 'Production overhead')){ ?>
-			    <?php if(!$verificationConfirmedPallet){?>
-<div align="right" id="confirmGeneratedPallet">
-		<button onclick="SaveDataGeneratedPallet('<?php echo $orderNo ?>','<?php echo $machine ?>','<?php echo $materialNumber ?>','<?php echo $materialDescription ?>','<?php echo $qtdePecas;?>','<?php echo $numPalete;?>','<?php echo $qtdeCaixa;?>','<?php echo $qtdeCamadas?>');" class="confirm"> Confirmar</button>
-</div>		
-                <?php }?>
-		   <?php }?>
+		   <div id="confirmGeneratedPallet"></div>
+		   
 <?php }?>
 <!--fim -->
 
@@ -486,9 +486,12 @@ echo $orderNo . str_pad($i, 6, "0", STR_PAD_LEFT);
 			                {?>
 				<div id="liberar<?php echo $i?>">
 				   <!-- Condicionais referentes a comparação de quantidade do que foi previsto com o que foi bipado -->
-				    <?php if(($conn->getConfirmedBoxQuantity()[$i] == $conn->getQtyboxpalete()[$i+1]) 
+				    <?php 
+				    
+				   if(
+				                 ($conn->getConfirmedBoxQuantity()[$i] == $conn->getQtyboxpalete()[$i+1]) 
     				          || ($conn->getConfirmedLayerQuantity()[$i] == $conn->getQtytraybox()[$i+1]) 
-				        || ($i == $palletPredictedQuantity)
+				              || (($i+1) == $palletPredictedQuantity)
 				        )
     				          {
     				              if (

@@ -105,7 +105,7 @@ $connPallet->SearchReleasedDB()
 				<td bgcolor=<?php echo $cor?> style="width: 5%" align="center"><?php echo date_format($connPallet->getEmission_date()[$i],'H:i:s') ?></td>
 				<td bgcolor=<?php echo $cor?> style="width: 5%" align="center"><?php echo $connPallet->getMachine()[$i] ?></td>
 				<td bgcolor=<?php echo $cor?> style="width: 15%" align="center"><?php echo $connPallet->getPallet_no()[$i]; ?></td>
-				<td bgcolor=<?php echo $cor?> style="width: 5%" align="center"><?php echo str_replace(',','.',number_format($connPallet->getPaleteQty()[$i])); ?></td>
+				<td bgcolor=<?php echo $cor?> style="width: 5%" align="center"><?php echo $connPallet->getPaleteQty()[$i]; ?></td>
 				<td bgcolor=<?php echo $cor?> style="width: 10%" align="center"><?php echo $connPallet->getProd_sap()[$i]; ?></td>
 				<td bgcolor=<?php echo $cor?> style="width: 30%" align="center"><?php echo $connPallet->getDesc_prod_sap()[$i]; ?></td>
 				<td bgcolor=<?php echo $cor?> style="width: 5%" align="center"><?php echo $connPallet->getReleasedResp()[$i]; ?></td>

@@ -82,7 +82,7 @@ if( $_SESSION['nm_setor'] == 'Quality management'){
 	<li><a class="fpp" href="viewSearchOrder.php"><?php echo $tabName?></a></li>
 	<?php }?>
 	<li><a class="overview selected" href="#">Status</a></li>
-	<?php if($_SESSION['nm_setor']  == "Production planning"){?>
+	<?php if(($_SESSION['nm_setor']  == "Production planning")||($_SESSION['nm_setor']  == "Production overhead")){?>
 	<li><a class="issues" href="viewCancelOrder.php">Cancelamento de Palete</a></li>
     <?php }?>
 	</ul>

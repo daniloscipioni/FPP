@@ -47,7 +47,7 @@ table td {padding:2px;}
 			<?php for ($i=1; $i<=$connPallet->num_rows;$i++){?>
 			<tr>
 				<td width="10%" align="center"><?php echo $connPallet->getPallet_no()[$i]; ?></td>
-				<td width="5%" align="center"><?php echo str_replace(',','.',number_format($connPallet->getPaleteQty()[$i])); ?></td>
+				<td width="5%" align="center"><?php echo $connPallet->getPaleteQty()[$i]; ?></td>
 				<td width="5%" align="center"><?php echo $connPallet->getProd_sap()[$i]; ?></td>
 				<td width="50%" align="center"><?php echo $connPallet->getDesc_prod_sap()[$i]; ?></td>
 				<td width="10%" align="center"><?php echo $connPallet->getReleasedResp()[$i]; ?></td>

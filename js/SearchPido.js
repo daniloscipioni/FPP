@@ -194,7 +194,7 @@ function printPage (sURL) {
 	}
 
 function SaveDataGeneratedPallet(order,machine,material,materialDesc,quantity,pallet,boxqty,trayqty) {
-	if (window.confirm("Confirmar a gera\u00e7\u00e3o dos paletes da OP "+ order +" ?")) {				
+	//if (window.confirm("Confirmar a gera\u00e7\u00e3o dos paletes da OP "+ order +" ?")) {				
 	$.post('../br.schott.com.util/SaveDataGeneratedPallet.php', {
 					order    : order,
 					machine    : machine,
@@ -205,12 +205,12 @@ function SaveDataGeneratedPallet(order,machine,material,materialDesc,quantity,pa
 					boxqty:boxqty,
 					trayqty:trayqty
 				}, function(data) {
-					$("#confirmGeneratedPallet").html("<div class='flash notice' align='center'>Confirmado!</div>");
+					$("#confirmGeneratedPallet").html("<div class='flash notice' align='center'>Fichas liberadas</div>");
 					$("#return_result_data").html(data);
 				}
 	
 				)
 
-			}		
+			//}		
 
 }

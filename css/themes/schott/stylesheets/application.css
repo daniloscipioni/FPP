@@ -633,6 +633,7 @@ button.ui-corner-all {
   text-decoration: none;
 }
 
+
 .btnstyle:hover {
   text-decoration: none;
   color: black;
@@ -642,6 +643,23 @@ button.ui-corner-all {
 }
 .btnstyle:visited {
   color: black;
+}
+
+.btnstyledisable {
+  background: #fffcff;
+  pointer-events: none;
+  background-image: -webkit-linear-gradient(top, #fffcff, #e8e8e8);
+  background-image: -moz-linear-gradient(top, #fffcff, #e8e8e8);
+  background-image: -ms-linear-gradient(top, #fffcff, #e8e8e8);
+  background-image: -o-linear-gradient(top, #fffcff, #e8e8e8);
+  background-image: linear-gradient(to bottom, #fffcff, #e8e8e8);
+  font-family: Arial;
+  color: #929292;
+  cursor:not-allowed;
+  font-size: 13px;
+  padding: 3px 8px 3px 8px;
+  border: solid #c3c7c9 0.5px;
+  text-decoration: none;
 }
 
  
