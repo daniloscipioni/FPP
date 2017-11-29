@@ -345,7 +345,7 @@ echo $orderNo . str_pad($i, 6, "0", STR_PAD_LEFT);
             }
             ?>
         				</td>
-				<!-- -- -->
+				<!-- -- -->a
 			</tr>  
                  <?php }?>
                     <?php if($rest == true) {?>
