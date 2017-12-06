@@ -65,27 +65,27 @@ $orderNo = $records[0]['ORDER_NO'];
 <title>Emissão de FPP - Schott</title>
 
 <link rel="stylesheet" media="all"
-	href="css/stylesheets/jquery/jquery-ui-1.11.0.css" />
+	href="css/stylesheets/jquery/jquery-ui-1.11.0.css<?php echo time();?>" />
 <link rel="stylesheet" media="all"
-	href="css/themes/schott/stylesheets/application.css" />
+	href="css/themes/schott/stylesheets/application.css<?php echo time();?>" />
 <link href="css/stylesheets/responsive.css" rel="stylesheet"
 	type="text/css" />
 <link rel="stylesheet" media="screen"
-	href="css/plugin_assets/redmine_agile/stylesheets/redmine_agile.css" />
+	href="css/plugin_assets/redmine_agile/stylesheets/redmine_agile.css<?php echo time();?>" />
 <link rel="stylesheet" media="screen"
-	href="/redmine/plugin_assets/redmine_checklists/stylesheets/checklists.css" />
+	href="/redmine/plugin_assets/redmine_checklists/stylesheets/checklists.css<?php echo time();?>" />
 <link
-	href="css/plugin_assets/redmine_checklists/stylesheets/checklists.css"
+	href="css/plugin_assets/redmine_checklists/stylesheets/checklists.css<?php echo time();?>"
 	rel="stylesheet" type="text/css" />
 <script
-	src="css/plugin_assets/redmine_checklists/javascripts/checklists.js"
+	src="css/plugin_assets/redmine_checklists/javascripts/checklists.js<?php echo time();?>"
 	type="text/javascript"></script>
 
-<script src="js/javascripts/jquery-1.11.1-ui-1.11.0-ujs-3.1.4.js"
+<script src="js/javascripts/jquery-1.11.1-ui-1.11.0-ujs-3.1.4.js<?php echo time();?>"
 	charset="utf-8"></script>
-<script src="js/javascripts/application.js" charset="utf-8"></script>
-<script src="js/javascripts/responsive.js"></script>
-<script src="css/themes/schott/javascripts/theme.js"></script>
+<script src="js/javascripts/application.js<?php echo time();?>" charset="utf-8"></script>
+<script src="js/javascripts/responsive.js<?php echo time();?>"></script>
+<script src="css/themes/schott/javascripts/theme.js<?php echo time();?>"></script>
 
 
 </head>
@@ -104,9 +104,8 @@ $orderNo = $records[0]['ORDER_NO'];
 				<th>Número Palete</th>
 				<th>Cód Produto</th>
 				<th>Descrição</th>
-				<th>Total no Palete</th>
-				<th>Peças Produzidas</th> 
-				
+				<th>Previstos</th>
+				<th>Bipados</th> 
 			</thead>
 
 
@@ -156,5 +155,7 @@ for($i=1; $i<= $connPallet->num_rows; $i++){
 </html>
 
 
-<script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
-<script src="js/SearchPido.js" type="text/javascript"></script>
+<script src="js/jquery-3.2.1.min.js<?php echo time();?>" type="text/javascript"></script>
+<script src="js/SearchPido.js<?php echo time();?>" type="text/javascript"></script>
+
+

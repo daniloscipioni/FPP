@@ -8,16 +8,14 @@
 <meta name="csrf-param" content="authenticity_token">
 <meta name="csrf-token" content="BWtd3OPvQzwhjTPErwLxHzeDH8SyM9PvSmXTNhVdaKAYygJ3VdE7EnOraA45QqU5qsDZHAWcSnu1W2QKz1+CQw==">
 <link rel="shortcut icon" href="../Images/fpp.png">
-<link rel="stylesheet" media="all" href="../css/stylesheets/jquery/jquery-ui-1.11.0.css?1500229109">
-<link rel="stylesheet" media="all" href="../css/themes/schott/stylesheets/application.css?1412685099">
-
-<link rel="stylesheet" media="all" href="../css/stylesheets/responsive.css?1500229109">
-
-<script src="../js/javascripts/jquery-1.11.1-ui-1.11.0-ujs-3.1.4.js?1500229109"></script>
-<script src="../js/javascripts/application.js?1500229109"></script>
-<script src="../js/javascripts/responsive.js?1500229109"></script>
-<script src="../js/javascripts/theme.js?1351450256"></script>
-<script src="../js/plugin_assets/redmine_checklists/javascripts/checklists.js?1500665867"></script>
+<link rel="stylesheet" media="all" href="../css/stylesheets/jquery/jquery-ui-1.11.0.css?<?php echo time();?>">
+<link rel="stylesheet" media="all" href="../css/themes/schott/stylesheets/application.css?<?php echo time();?>">
+<link rel="stylesheet" media="all" href="../css/stylesheets/responsive.css?<?php echo time();?>">
+<script src="../js/javascripts/jquery-1.11.1-ui-1.11.0-ujs-3.1.4.js?<?php echo time();?>"></script>
+<script src="../js/javascripts/application.js?<?php echo time();?>"></script>
+<script src="../js/javascripts/responsive.js?<?php echo time();?>"></script>
+<script src="../js/javascripts/theme.js?<?php echo time();?>"></script>
+<script src="../js/plugin_assets/redmine_checklists/javascripts/checklists.js?<?php echo time();?>"></script>
 </head>
 <body class="theme-Schott controller-account action-login">
 
@@ -110,5 +108,6 @@
 </div>
 
 
+</body>
 
-</body></html>
+</html>

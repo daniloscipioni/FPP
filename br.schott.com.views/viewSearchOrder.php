@@ -42,7 +42,6 @@ if( $_SESSION['nm_setor'] == 'Quality management'){
 <script src="../js/javascripts/application.js?1500229109"></script>
 <script src="../js/javascripts/responsive.js?1500229109"></script>
 <script src="../js/javascripts/theme.js?1351450256"></script>
-<script src="../js/plugin_assets/redmine_checklists/javascripts/checklists.js?1500665867"></script>
 </head>
 <body class="theme-Schott controller-welcome action-index">
 
@@ -121,12 +120,6 @@ if( $_SESSION['nm_setor'] == 'Quality management'){
 
     </div>
 <!-- </div> -->
-
-
-
-
-        <link rel="stylesheet" media="all" href="/redmine/plugin_assets/sidebar_hide/stylesheets/sidebar_hide.css?1500665373">
-<script src="/redmine/plugin_assets/sidebar_hide/javascripts/sidebar_hide.js?1500665373"></script>
 
 
         <div style="clear:both;"></div>
