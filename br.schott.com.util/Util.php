@@ -95,8 +95,7 @@ class Util extends connection
         return  $qtde_camadas_prev * $qtde_caixas_palete * $pcs_caixa;
         
     }
-  
-    
+      
     /**
      * @param integer $predicatedBoxQuantity - resultado da função calcPredicatedBox - Calculo de caixas previstas
      * @param integer $boxPerLayer - valor que vem da consulta WEB ao PIDO que retorna o valor de caixas por camada
@@ -113,6 +112,28 @@ class Util extends connection
     public function calcPredicatedPieces($predicatedBoxQuantity, $boxPerLayer){
         
         return  round($predicatedBoxQuantity / $boxPerLayer);
+        
+    }
+    
+    public function calcTolerance($OpQuantity, $producedPieces){
+
+          if ($OpQuantity<=30000){
+              $tolMax = $OpQuantity + ($OpQuantity * 0.08);
+              $tolMin = $OpQuantity - ($OpQuantity * 0.08);
+          }elseif (($OpQuantity>30000)&&($OpQuantity<=100000)){
+                 $tolMax = $OpQuantity + ($OpQuantity * 0.04);
+                 $tolMin = $OpQuantity - ($OpQuantity * 0.04);
+          }elseif ($OpQuantity>100000){     
+                 $tolMax = $OpQuantity + ($OpQuantity * 0.02);
+                 $tolMin = $OpQuantity - ($OpQuantity * 0.02);
+          }
+        
+        //  echo "MIN = " . $tolMin . "MAX = ". $tolMax;
+          
+          if(($producedPieces>=$tolMin) && (($producedPieces<=$tolMax)||($producedPieces>$tolMax)))
+         {
+             return true;
+         }
         
     }
     

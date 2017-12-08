@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+	<meta charset="UTF-8"></element>
 <?php
 set_time_limit(0);
 date_default_timezone_set("America/Sao_Paulo");
@@ -51,6 +53,7 @@ require '../br.schott.com.util/Util.php';
  }else{$machine = $records[0]['DEF_MAQUINA'];}
  
  $descStatus = $records[0]['DESC_STATUS'];
+ $opQuantityOriginal = (int)$records[0]['QTDE_OP'];
  $opQuantity = (int)$records[0]['QTDE_OP'];
  $startDate =$records[0]['EARLIEST_DATA_INICIO'];
  $producedPieces = $records[0]['PCS_PROD'];
@@ -436,7 +439,6 @@ echo $orderNo . str_pad($i, 6, "0", STR_PAD_LEFT);
             <?php
         /* echo  "Quantidade de paletes = ".$conn->getQuantityPallet(); */
         for ($i = 0; $i <= $conn->getQuantityPallet() - 1; $i ++) { 
-
             ?>                
              
             
@@ -482,16 +484,15 @@ echo $orderNo . str_pad($i, 6, "0", STR_PAD_LEFT);
 			   <?php if($connPallet->SearchPalletsDB($conn->getConfirmedNoPallet()[$i]))
 			         {
 			             echo "<button style='visibility: hidden;'>1</button><font color='green'><b>Liberado</b></font><button style='visibility: hidden;'>1</button>";
-			         }else
-			                {?>
+			         }elseif(($i+1)<$palletPredictedQuantity)
+			            {?>
 				<div id="liberar<?php echo $i?>">
 				   <!-- Condicionais referentes a comparação de quantidade do que foi previsto com o que foi bipado -->
 				    <?php 
-				    
-				   if(
-				                 ($conn->getConfirmedBoxQuantity()[$i] == $conn->getQtyboxpalete()[$i+1]) 
-    				          || ($conn->getConfirmedLayerQuantity()[$i] == $conn->getQtytraybox()[$i+1]) 
-				              || (($i+1) == $palletPredictedQuantity)
+				      
+				   
+				   if( ($conn->getConfirmedBoxQuantity()[$i] == $conn->getQtyboxpalete()[$i+1])
+				       || ($conn->getConfirmedLayerQuantity()[$i] == $conn->getQtytraybox()[$i+1]) 
 				        )
     				          {
     				              if (
@@ -499,15 +500,27 @@ echo $orderNo . str_pad($i, 6, "0", STR_PAD_LEFT);
     				                  || (substr($conn->getConfirmedNoPallet()[$i],-3,3)=='101')
     				                  || (substr($conn->getConfirmedNoPallet()[$i],-3,3)=='102')
     				                  || (substr($conn->getConfirmedNoPallet()[$i],-3,3)=='103')
+    				                  
     				                  )
     				          ?>
 					<button class="btnstyle" id="<?php echo "btn".$i?>" name="<?php echo "btn".$i?>" style="cursor:pointer;" target="_blank" onclick="UpdateDataReleaseadPallet('<?php echo $conn->getOrderNo()?>','<?php echo $conn->getMachine()?>','<?php echo $conn->getMaterialNumber()?>','<?php echo str_replace('"','',$conn->getMaterialDesc())?>','<?php echo $conn->getConfirmedApprovedQuantity()[$i]?>','<?php echo $conn->getConfirmedNoPallet()[$i]?>','<?php echo $i?>');"> 
 					Liberar</button>
-					<?php }else{?>
-					<div><span><img alt="exclamation" src="../Images/exclamation.png" height="18" width="18" title="Quantidade de caixas ou quantidade de camadas diferente da ficha impressa"></span></div>
-					<?php }?>
+					<?php }
+					   else{?>
+								<div><span><img alt="exclamation" src="../Images/exclamation.png" height="18" width="18" title="Quantidade de caixas ou quantidade de camadas diferente da ficha impressa"></span></div>
+					  <?php }?>
 				</div>
-				<?php }?>
+				<?php }else{
+				        
+				    if($util->calcTolerance($opQuantityOriginal,$producedPieces)){?>
+				        <button class="btnstyle" id="<?php echo "btn".$i?>" name="<?php echo "btn".$i?>" style="cursor:pointer;" target="_blank" onclick="UpdateDataReleaseadPallet('<?php echo $conn->getOrderNo()?>','<?php echo $conn->getMachine()?>','<?php echo $conn->getMaterialNumber()?>','<?php echo str_replace('"','',$conn->getMaterialDesc())?>','<?php echo $conn->getConfirmedApprovedQuantity()[$i]?>','<?php echo $conn->getConfirmedNoPallet()[$i]?>','<?php echo $i?>');">
+					Liberar</button>
+					
+				    <?php }else{?>
+				            <div><span><img alt="exclamation" src="../Images/exclamation.png" height="18" width="18" title="Quantidade de caixas ou quantidade de camadas diferente da ficha impressa"></span></div>
+					
+				  <?php }
+				}?>
 				</td>
 			</tr>  
             <?php } ?>         

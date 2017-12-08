@@ -17,23 +17,8 @@ $connPallet->SearchReleasedDB()
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
+<script src="../js/sorttable.js"></script>
 <title>Emissão de FPP - Schott</title>
-
-<link rel="stylesheet" media="all"
-	href="../css/stylesheets/jquery/jquery-ui-1.11.0.css?<?php echo time();?>" />
-<link rel="stylesheet" media="all"
-	href="../css/themes/schott/stylesheets/application.css?<?php echo time();?>" />
-<link href="css/stylesheets/responsive.css?<?php echo time();?>" rel="stylesheet"
-	type="text/css" />
-<link rel="stylesheet" media="screen"
-	href="../css/plugin_assets/redmine_agile/stylesheets/redmine_agile.css?<?php echo time();?>" />
-<link rel="stylesheet" type="text/css" media="print" href="../css/pageprint/print.css?<?php echo time();?>">
-
-
-<script src="../js/javascripts/jquery-1.11.1-ui-1.11.0-ujs-3.1.4.js?<?php echo time();?>" charset="utf-8"></script>
-<script src="../js/javascripts/application.js?<?php echo time();?>" charset="utf-8"></script>
-<script src="../js/javascripts/responsive.js?<?php echo time();?>"></script>
-<script src="../css/themes/schott/javascripts/theme.js?<?php echo time();?>"></script>
 
 
 </head>
@@ -68,16 +53,17 @@ $connPallet->SearchReleasedDB()
 	
 <!-- /////////// -->		
 	  <div class="no-print">
-        
+
+	   <h3 align="left"> Paletes liberados </h3>         
 		&nbsp;
-		<table border="1" width="70%" align="center" class="list issue-report-auto">
-			<thead>
-			<?php if($_SESSION['nm_setor']  == "Inbound & int. log."){?>
-			<th colspan="10">Paletes liberados</th>
-			<?php }else{ ?>
-			    <th colspan="9">Paletes liberados</th>
-			<?php }?>
-			</thead>
+		<table border="1" width="70%" align="center" class="list issue-report-auto sortable">
+			<!-- <thead> -->
+			 <?php /* if($_SESSION['nm_setor']  == "Inbound & int. log."){ */ ?> 
+			<!-- <th colspan="10">Paletes liberados</th> -->
+			<?php /* }else{  */?>
+			 <!--    <th colspan="9">Paletes liberados</th> -->
+			<?php /* } */?>
+			<!-- </thead> -->
 			<thead>
 				<th style="width: 5%">Data</th>
 				<th style="width: 5%">Hora</th>

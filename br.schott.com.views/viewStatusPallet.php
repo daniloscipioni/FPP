@@ -115,7 +115,7 @@ $("#liberados").focus();
         <div class="btn-group" role="group" aria-label="..."> 
         <button onclick="SearchReleasedPallets();" type="button" id="liberados" class="btn btn-default">Liberados</button>
         <button onclick="SearchTransferredPallets();"type="button" class="btn btn-default">Transferidos</button>
-        <button onclick="SearchNotReleasedPallets();"type="button" class="btn btn-default">Não liberados</button>
+        <button onclick="SearchNotReleasedPallets();"type="button" class="btn btn-default">Em Processo</button>
         </div> 
     </div> 
 
