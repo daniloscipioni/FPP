@@ -43,7 +43,7 @@ if( $_SESSION['nm_setor'] == 'Quality management'){
 
 <script src="../js/plugin_assets/redmine_checklists/javascripts/checklists.js?<?php echo time();?>"></script> 
 </head>
-<body class="theme-Schott controller-welcome action-index">
+<body class="theme-Schott controller-welcome action-index" oncopy="return false" oncut="return false" onpaste="return false">
 
 <div id="wrapper">
 
@@ -78,7 +78,7 @@ if( $_SESSION['nm_setor'] == 'Quality management'){
         
 
     <ul>
-<?php if($_SESSION['nm_setor']  != "Inbound & int. log."){?>
+<?php if (($_SESSION['nm_setor']  != "Inbound & int. log.") && (strpos(trim($_SESSION['nm_setor']), 'Runner', 0)!==0)){?>
 	<li><a class="fpp" href="viewSearchOrder.php"><?php echo $tabName?></a></li>
 	<?php }?>
 	<li><a class="overview selected" href="#">Status</a></li>

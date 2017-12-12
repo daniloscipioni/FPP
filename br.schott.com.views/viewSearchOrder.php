@@ -79,13 +79,15 @@ if( $_SESSION['nm_setor'] == 'Quality management'){
         
 
     <ul>
-
-	<li><a class="overview selected" href="#"><?php echo $tabName?></a></li>
-	<li><a class="issues" href="viewStatusPallet.php">Status</a></li>
-	<?php if($_SESSION['nm_setor']  != "Quality management"){?>
-	<li><a class="issues" href="viewCancelOrder.php">Cancelamento de Palete</a></li>
-    <?php }?>
+    	<li><a class="overview selected" href="#"><?php echo $tabName?></a></li>
+    	
+    	<li><a class="issues" href="viewStatusPallet.php">Status</a></li>
+    	
+    	<?php if($_SESSION['nm_setor']  != "Quality management"){?>
+    	<li><a class="issues" href="viewCancelOrder.php">Cancelamento de Palete</a></li>
+        <?php }?>
 	</ul>
+
 </div>
 </div>
 

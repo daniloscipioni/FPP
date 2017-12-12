@@ -21,8 +21,8 @@ if($validation->num_rows == 1)
      $_SESSION['fpp_permission']       =  $validation->fpp_permission[1];
      $_SESSION['fpp_desc_permission']  =  $validation->fpp_desc_permission[1];
     
-    
-     if($_SESSION['nm_setor']  == "Inbound & int. log.")
+     /* verifica se é do setor de expedição ou produção */
+     if(($_SESSION['nm_setor']  == "Inbound & int. log.") || (strpos(trim($_SESSION['nm_setor']), 'Runner', 0)===0))
      {
          header("Location: ../br.schott.com.views/viewStatusPallet.php");
      }else{
