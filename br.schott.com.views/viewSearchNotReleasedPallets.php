@@ -28,7 +28,7 @@ for($k=0; $k<= count($arrUni)-1; $k++)
     $AuxString.=$arrUni[$k]."%00";
 }
 
-
+ // Relatório no PIDO - DSCI_pallet_boxQuantity
 $url = "http://10.20.26.28/CronetJVX//pido/getData?p_pido=50000001040&ORDER_NO=".$AuxString."&p_crosscompany=1&p_format=JSON&p_querytimeout=30&p_userid=DSCI/DSCI@cronet_cpbritu1";
 
 $ch = curl_init();

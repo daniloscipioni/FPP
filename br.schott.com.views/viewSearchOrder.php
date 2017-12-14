@@ -8,7 +8,7 @@ if (!isset($_SESSION['id_user'])) {
     die();
 } 
 
-if( $_SESSION['nm_setor'] == 'Quality management'){
+if( ($_SESSION['nm_setor'] == 'Quality management') || (trim($_SESSION['nm_setor']) == 'In-process-control')){
     $tabName = "Liberação Qualidade";
 }elseif ($_SESSION['nm_setor'] == 'Production planning')
 {

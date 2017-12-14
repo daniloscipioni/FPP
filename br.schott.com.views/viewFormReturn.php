@@ -416,7 +416,7 @@ echo $orderNo . str_pad($i, 6, "0", STR_PAD_LEFT);
 
 		&nbsp;
 
-<?php if(  trim($_SESSION['nm_setor']) == 'Quality management' || trim($_SESSION['nm_setor']) == 'Production overhead'){
+<?php if(  (trim($_SESSION['nm_setor']) == 'Quality management') || (trim($_SESSION['nm_setor']) == 'In-process-control') || (trim($_SESSION['nm_setor']) == 'Production overhead')  ){
 
     $conn->searchPallets($_POST['op']);
     ?>
