@@ -191,7 +191,7 @@ if($maquina!=null){
 			</tr>
 			<tr>
 				<td align="center"><?php echo str_replace(',', '.', number_format($qtde_caixas_prev)) ?></td>
-				<td align="center"><?php echo $palletPredictedQuantity?></td>
+				<td align="center"><?php echo $qtde_pallet_prev?></td>
 				<td align="center"><?php echo $layerPredictedQuantity?></td>
 			</tr>
 
@@ -221,7 +221,7 @@ if($maquina!=null){
         
        
         
-        for ($i = 1; $i <= $palletPredictedQuantity; $i ++) {
+        for ($i = 1; $i <= $qtde_pallet_prev; $i ++) {
             $opQuantity = $total_op;
             //$conn->setOpQuantity($total_op);
             
@@ -347,7 +347,7 @@ echo $orderNo . str_pad($i, 6, "0", STR_PAD_LEFT);
 					<input type="hidden" id="idcustomer"     name="nmcustomer" value="<?php echo (int)$codeCustomer." - ".$customer;?>">
 					<input type="hidden" id="idmaterialdesc" name="nmmaterialdesc" value="<?php echo $materialDesc?>">	
 					<input type="hidden" id="iddeliverydate" name="nmdeliverydate" value="<?php echo date('d/m/Y', strtotime($deliveryDate));?>">
-					<input type="hidden" id="idquantity" 	 name="nmquantity" value="<?php echo $palletPredictedQuantity;?>">	
+					<input type="hidden" id="idquantity" 	 name="nmquantity" value="<?php echo $qtde_pallet_prev;?>">	
 					<input type="hidden" id="idcxpercmd" 	 name="nmcxpercmd" value="<?php echo $boxPerLayer;?>">	
 					<input type="hidden" id="idpcsperbox" 	 name="nmpcsperbox" value="<?php echo $piecesPerBox;?>">	
 					<input type="hidden" id="idqtdematerial" name="nmqtdematerial" value="<?php echo $conn->getQuantityMaterial();?>">
@@ -423,7 +423,7 @@ echo $orderNo . str_pad($i, 6, "0", STR_PAD_LEFT);
 					<input type="hidden" id="idpcsqty" name="nmpcsqty" value="<?php echo $conn->getConfirmedApprovedQuantity()[$i];?>">
 					<input type="hidden" id="idpcsperbox" name="nmpcsperbox" value="<?php echo $piecesPerBox;?>">
 					<input type="hidden" id="idboxperlayer" name="nmboxperlayer" value="<?php echo $boxPerLayer;?>">
-					<input type="hidden" id="idpalletquantity" name="nmpalletquantity" value="<?php echo $palletPredictedQuantity?>">
+					<input type="hidden" id="idpalletquantity" name="nmpalletquantity" value="<?php echo $qtde_pallet_prev?>">
 					<input type="hidden" id="idqtdematerial" name="nmqtdematerial" value="<?php echo $conn->getQuantityMaterial();?>">
 					<input type="hidden" id="idcoditem" 	 name="nmcoditem" value="<?php echo $codItem;?>">	
 					<input type="hidden" id="iddescitem" 	 name="nmdescitem" value="<?php echo $descItem;?>">	
@@ -443,7 +443,7 @@ echo $orderNo . str_pad($i, 6, "0", STR_PAD_LEFT);
 			   <?php if($connPallet->SearchPalletsDB($conn->getConfirmedNoPallet()[$i]))
 			         {
 			             echo "<button style='visibility: hidden;'>1</button><font color='green'><b>Liberado</b></font><button style='visibility: hidden;'>1</button>";
-			         }elseif(($i+1)<$palletPredictedQuantity)
+			         }elseif(($i+1)<$qtde_pallet_prev)
 			            {?>
 				<div id="liberar<?php echo $i?>">
 				   <!-- Condicionais referentes a compara��o de quantidade do que foi previsto com o que foi bipado -->
