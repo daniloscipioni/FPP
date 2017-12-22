@@ -831,13 +831,13 @@ Class Connect_users{ /* Conexão com a base de dados de usuários e retorna autent
 Class Connect_ReleasedPallets{
     //Local Access
     //protected $host = 'SBRIPVW720019';
-   /*
+  
     protected $host = 'localhost';
     protected $user = 'fpp';
     protected $pswd = 'fpp';
     protected $dbname = 'fpp';
     protected $con = null;
-   */
+  /*
      
     
      protected $host = '10.20.29.247';
@@ -845,7 +845,7 @@ Class Connect_ReleasedPallets{
      protected $pswd = 'fpp';
      protected $dbname = 'fpp';
      protected $con = null;
-   
+     */
     
     function __construct(){} //metodo construtor
     

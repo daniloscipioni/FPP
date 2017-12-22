@@ -1,11 +1,9 @@
 <!DOCTYPE html>
-	<meta charset="UTF-8"></element>
 <?php
 set_time_limit(0);
 date_default_timezone_set("America/Sao_Paulo");
 setlocale(LC_ALL, 'pt_BR');
-//resolve problema de $_SESSION
-header('P3P:CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"');
+header('Content-type: text/html; charset=UTF-8');
 use Connection\Connection;
 use Util\Util;
 //use Util\Util;
@@ -14,63 +12,24 @@ $connPallet = new Access_ReleasedPallets();
 $conn = new connection();
 require '../br.schott.com.util/Util.php';
 
- $util = new Util();
- $util->setOp($_POST['op']);
+$util = new Util();
+$util->setOp($_POST['op']);
 
 
-// $conn->searchMaterials($util->getOp());
+$conn->searchMaterials($_POST['op']);
+ 
 
- 
- //$conn->searchPallets($util->getOp());
-  //$conn->searchOP($util->getOp());
- $conn->searchMaterials($_POST['op']);
-// $conn->searchOP($_POST['op']);
- 
-/*ini  */
- // Relatório no PIDO - DSCI_PPDS_FPA
- $urlOp = 'http://10.20.26.28/CronetJVX//pido/getData?p_pido=50000000380&ORDER_NO=' .$_POST['op'] . '&p_crosscompany=0&p_format=JSON&p_querytimeout=30&p_userid=PIDO/PIDO@cronet_cpbritu1';
- 
- $ch = curl_init();
- curl_setopt($ch, CURLOPT_URL,  $urlOp);
- curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
- $output = curl_exec($ch);
- curl_close($ch);
- 
- //echo "OUTPUT = " . var_dump($output)."<br>";
- $jsonStr = json_decode($output, true);
- $records = $jsonStr['collection'];
- 
- $orderNo = $records[0]['ORDER_NO'];
- $codeCustomer = (int)$records[0]['COD_CLIENTE'];
- $customer = $records[0]['CLIENTE'];
- $materialNumber = $records[0]['MATERIAL_NUM'];
- $materialDescription = $records[0]['DESCRICAO'];
- $materialDesc = $records[0]['MATERIAL_DESC'];
-  
- /* Condicional verificar se a máquina foi programada para uma máquina diferente da máquina padrão, caso não foi programada, a variavel armazena a máquina padrão do produto */
- if($records[0]['MAQUINA']!=null){
-     $machine = $records[0]['MAQUINA'];
- }else{$machine = $records[0]['DEF_MAQUINA'];}
- 
- $descStatus = $records[0]['DESC_STATUS'];
- $opQuantityOriginal = (int)$records[0]['QTDE_OP'];
- $opQuantity = (int)$records[0]['QTDE_OP'];
- $startDate =$records[0]['EARLIEST_DATA_INICIO'];
- $producedPieces = $records[0]['PCS_PROD'];
- $deliveryDate = $records[0]['DATA_ENTREGA'];
- $quantityToProduce = $records[0]['QTDE_A_PROD'];
- $boxPerLayer = (int) $records[0]['CXS_CAMADA'];
- $boxPerPallet = (int) $records[0]['CXS_PALETE'];
- $piecesPerPallet = $records[0]['PCS_PALETE'];
- $quantityOfLayers = (int) $records[0]['QTDE_CAMADAS'];
- $piecesPerBox = (int)$records[0]['PCS_CAIXA'];
- $boxPredictedQuantity = $records[0]['QTDE_CAIXAS_PREV'];
- $layerPredictedQuantity = (int)$records[0]['QTDE_CAMADAS_PREV'];
- $palletPredictedQuantity = (int)$records[0]['QTDE_PALLET_PREV'];
- 
-/* fim  */ 
- 
 $verificationConfirmedPallet =  $connPallet->SearchPalletsConfirm($_POST['op']);
+
+extract($_POST);
+
+/* Condicional verificar se a mï¿½quina foi programada para uma mï¿½quina diferente da mï¿½quina padrï¿½o, caso nï¿½o foi programada, a variavel armazena a mï¿½quina padrï¿½o do produto */
+
+if($maquina!=null){
+    $machine_fin = $maquina;
+}else{
+    $machine_fin = $default_maquina;
+}
 
 ?>
 <html>
@@ -96,7 +55,7 @@ $verificationConfirmedPallet =  $connPallet->SearchPalletsConfirm($_POST['op']);
 <body>
 <?php if(($_SESSION['nm_setor'] == 'Production planning') || ($_SESSION['nm_setor'] == 'Production overhead')){ ?>
     <?php if($verificationConfirmedPallet){?>
-    <div class='flash notice' align='center' id='confirmGeneratedPalletInfo'>Fichas já liberadas</div>
+    <div class='flash notice' align='center' id='confirmGeneratedPalletInfo'>Fichas jï¿½ liberadas</div>
     <script type="text/javascript">
     $('#teste').removeClass('btnstyle');
     $('#teste').addClass('btnstyledisable');
@@ -105,7 +64,7 @@ $verificationConfirmedPallet =  $connPallet->SearchPalletsConfirm($_POST['op']);
 <?php }?>
 &nbsp;
 	<div align="left">
-		<button class="btnstyle" onclick="location.reload();">« Voltar</button>
+		<button class="btnstyle" onclick="location.reload();">&laquo; Voltar</button>
 	</div>
 
 
@@ -117,11 +76,11 @@ $verificationConfirmedPallet =  $connPallet->SearchPalletsConfirm($_POST['op']);
         <table border="1" width="70%" align="center" class="list issue-report">
 			<tr>
 				<td colspan="2" align="left"><b>Cliente </b></td>
-				<td colspan="8" align="left"><?php echo $codeCustomer." - ".$customer?></td>
+				<td colspan="8" align="left"><?php echo $cod_customer." - ".$customer?></td>
 			</tr>
 			<tr>
 				<td colspan="2" align="left"><b>Material </b></td>
-				<td colspan="8" align="left"><?php echo $materialNumber." - ".$materialDesc ?></td>
+				<td colspan="8" align="left"><?php echo $material_num." - ".$material_desc ?></td>
 			</tr>
 			
 		</table>
@@ -133,23 +92,23 @@ $verificationConfirmedPallet =  $connPallet->SearchPalletsConfirm($_POST['op']);
 			</tr>
 			<tr>
 
-				<td width="20%"><b>Máquina / Status </b></td>
-				<td width="20%" align="left"><?php echo $machine ." - ". utf8_decode($descStatus)?></td>
+				<td width="20%"><b>MÃ¡quina / Status </b></td>
+				<td width="20%" align="left"><?php echo $maquina ." - ". $status ?></td>
 				<td width="20%" colspan="2"><b>Quantidade da OP </b></td>
-				<td width="20%" align="left"><?php echo str_replace(',', '.', number_format($opQuantity)) ?></td>
+				<td width="20%" align="left"><?php echo  $qtde_op ?></td>
 			</tr>
 			<tr>
-				<td width="20%"><b>Data de Início </b></td>
-				<td width="10%" align="left"><?php echo  date('d/m/Y', strtotime($startDate)) ?></td>
+				<td width="20%"><b>Data de Inï¿½cio </b></td>
+				<td width="10%" align="left"><?php echo  date('d/m/Y', strtotime($data_inicio)) ?></td>
 				<td width="20%" colspan="2"><b>Quantidade Produzida</b></td>
-				<td width="20%" align="left"><?php echo str_replace(',', '.', number_format($producedPieces)) ?></td>
+				<td width="20%" align="left"><?php echo str_replace(',', '.', number_format($pcs_prod)) ?></td>
 
 			</tr>
 			<tr>
 				<td width="20%"><b>Data de Entrega </b></td>
-				<td width="10%" align="left"><?php echo  date('d/m/Y', strtotime($deliveryDate)) ?></td>
+				<td width="10%" align="left"><?php echo  date('d/m/Y', strtotime($data_entrega)) ?></td>
 				<td width="20%" colspan="2"><b>Quantidade a Produzir</b></td>
-				<td width="20%" align="left"><?php echo str_replace(',', '.', number_format($quantityToProduce)) ?></td>
+				<td width="20%" align="left"><?php echo str_replace(',', '.', number_format($qtde_a_produzir)) ?></td>
 			</tr>
 			
 		</table>
@@ -157,21 +116,21 @@ $verificationConfirmedPallet =  $connPallet->SearchPalletsConfirm($_POST['op']);
 		<table border="1" width="70%" align="center" class="list issue-report">
 			
 			<tr>
-				<td colspan="6" align="center"><b>Especificação de Embalagem </b></td>
+				<td colspan="6" align="center"><b>EspecificaÃ§Ã£o de Embalagem </b></td>
 			</tr>
 			<tr>
 				<td align="center"><b>Cx / Camada:</b></td>
-				<td align="center"><?php echo $boxPerLayer ?></td>
+				<td align="center"><?php echo $cxs_camada ?></td>
 				<td align="center"><b>Cxs / Palete:</b></td>
-				<td align="center"><?php echo $boxPerPallet ?></td>
-				<td rowspan="2" align="center"><b>Peças / Palete:</b></td>
-				<td rowspan="2" align="center"><?php echo str_replace(',', '.', number_format($piecesPerPallet)) ?></td>
+				<td align="center"><?php echo $cxs_palete ?></td>
+				<td rowspan="2" align="center"><b>PeÃ§as / Palete:</b></td>
+				<td rowspan="2" align="center"><?php echo str_replace(',', '.', number_format($pcs_palete)) ?></td>
 			</tr>
 			<tr>
 				<td align="center"><b>Qtde Camadas:</b></td>
-				<td align="center"><?php echo $quantityOfLayers ?></td>
-				<td align="center"><b>Peças / Caixa:</b></td>
-				<td align="center"><?php echo $piecesPerBox ?></td>
+				<td align="center"><?php echo $qtde_camadas ?></td>
+				<td align="center"><b>Peï¿½as / Caixa:</b></td>
+				<td align="center"><?php echo $pcs_caixa ?></td>
 			</tr>
 		
 		</table>
@@ -183,8 +142,8 @@ $verificationConfirmedPallet =  $connPallet->SearchPalletsConfirm($_POST['op']);
 				</b></td>
 			</tr>
 			<tr>
-				<td width="15%" align="center"><b>Código do Item</b></td>
-				<td width="45%" align="center"><b>Descrição do Item</b></td>
+				<td width="15%" align="center"><b>CÃ³digo do Item</b></td>
+				<td width="45%" align="center"><b>DescriÃ§Ã£o do Item</b></td>
 				<td width="25%" align="center"><b>Quantidade do Item</b></td>
 				<td width="10%" align="center"><b>Unidade</b></td>
 			</tr>
@@ -231,7 +190,7 @@ $verificationConfirmedPallet =  $connPallet->SearchPalletsConfirm($_POST['op']);
 				<td align="center"><b>Quantidade de camadas por Palete</b></td>
 			</tr>
 			<tr>
-				<td align="center"><?php echo str_replace(',', '.', number_format($boxPredictedQuantity)) ?></td>
+				<td align="center"><?php echo str_replace(',', '.', number_format($qtde_caixas_prev)) ?></td>
 				<td align="center"><?php echo $palletPredictedQuantity?></td>
 				<td align="center"><?php echo $layerPredictedQuantity?></td>
 			</tr>
@@ -248,15 +207,15 @@ $verificationConfirmedPallet =  $connPallet->SearchPalletsConfirm($_POST['op']);
 				<td colspan="4" align="center"><b>Paletes Previstos</b></td>
 			</tr>
 			<tr>
-				<td align="center"><b>Nº Palete</b></td>
+				<td align="center"><b>NÂº Palete</b></td>
 				<td align="center"><b>Qtde CX </b></td>
 				<td align="center"><b>Qtde Camadas</b></td>
-				<td align="center"><b>Qtde Peças</b></td>
+				<td align="center"><b>Qtde Peï¿½as</b></td>
 			</tr>      
                     
                  <?php
         
-        $leftover = $boxPredictedQuantity;
+        $leftover = $qtde_caixas_prev;
         $total_op = $opQuantity;
         $rest = false;
         
@@ -272,7 +231,7 @@ $verificationConfirmedPallet =  $connPallet->SearchPalletsConfirm($_POST['op']);
                    
                    
                     <tr>
-				<!--Nº do Palete -->
+				<!--Nï¿½ do Palete -->
 				<td align="center">
                         	<?php
             
@@ -289,7 +248,7 @@ echo $orderNo . str_pad($i, 6, "0", STR_PAD_LEFT);
 				<td align="center">
                             <?php
             
-            // Compara se a sobra da quantidade de caixas é maior que a quantidade total de caixas por palete, caso seja verdadeiro. faz a redução da quantidade total de caixas pela quantidade de caixas por palete.
+            // Compara se a sobra da quantidade de caixas ï¿½ maior que a quantidade total de caixas por palete, caso seja verdadeiro. faz a reduï¿½ï¿½o da quantidade total de caixas pela quantidade de caixas por palete.
             if ($leftover > $boxPerPallet) {
                 
                 $predicatedBoxQuantity = $util->calcPredicatedBox($layerPredictedQuantity, $boxPerLayer, $piecesPerBox) / $piecesPerBox;
@@ -328,7 +287,7 @@ echo $orderNo . str_pad($i, 6, "0", STR_PAD_LEFT);
                  </td>
 				<!-- -- -->
 
-				<!--Qtde Peças-->
+				<!--Qtde Peï¿½as-->
 				<td align="center">
                             <?php
             
@@ -336,12 +295,12 @@ echo $orderNo . str_pad($i, 6, "0", STR_PAD_LEFT);
             
             if ($predicatedBoxQuantityPieces < $piecesLeftover) {
                 $total_op = $piecesLeftover - $predicatedBoxQuantityPieces;
-                // Retorna o total de peças previstas por caixa
+                // Retorna o total de peï¿½as previstas por caixa
                 echo str_replace(',', '.', number_format($predicatedBoxQuantityPieces));
                 $predicatedInformation[$i]['qtde_pecas'] = str_replace(',', '.', number_format($predicatedBoxQuantityPieces));
                 $qtdePecas .= str_replace(',', '.', number_format($predicatedBoxQuantityPieces)).";";
             } else {
-                // Retorna os resto das peças
+                // Retorna os resto das peï¿½as
                 echo str_replace(',', '.', number_format($piecesLeftover));
                 $predicatedInformation[$i]['qtde_pecas'] = str_replace(',', '.', number_format($piecesLeftover));
                 $qtdePecas .= str_replace(',', '.', number_format($piecesLeftover)).";";
@@ -354,7 +313,7 @@ echo $orderNo . str_pad($i, 6, "0", STR_PAD_LEFT);
                     <?php if($rest == true) {?>
                     <tr>
 				<!-- <td align="center" colspan="4"> 
-				  Sobra de 1 Caixa com: </?php echo round($predicatedBoxQuantityLeftover*$piecesPerBox);?> Peças
+				  Sobra de 1 Caixa com: </?php echo round($predicatedBoxQuantityLeftover*$piecesPerBox);?> Peï¿½as
 				</td>-->
 			</tr> 
                     <?php
@@ -398,7 +357,7 @@ echo $orderNo . str_pad($i, 6, "0", STR_PAD_LEFT);
 					<input type="hidden" id="nmunityitem" 	 name="nmunityitem" value="<?php echo $unityItem;?>">
 					
 			   <button class="btnstyle" onClick="document.getElementById('predictedPallets').submit();" target="_blank">Visualizar</button>
-				<!-- Botão não visivel para que o botão caiba na linha da tabela -->
+				<!-- Botï¿½o nï¿½o visivel para que o botï¿½o caiba na linha da tabela -->
     		   <button id="teste" class="btnstyle" onClick="if (window.confirm('Deseja liberar fichas?')) {document.getElementById('predictedPallets').submit();SaveDataGeneratedPallet('<?php echo $orderNo ?>','<?php echo $machine ?>','<?php echo $materialNumber ?>','<?php echo $materialDescription ?>','<?php echo $qtdePecas;?>','<?php echo $numPalete;?>','<?php echo $qtdeCaixa;?>','<?php echo $qtdeCamadas?>');$(this).removeClass('btnstyle');$(this).addClass('btnstyledisable');}" target="_blank">Liberar</button>
 			
 			
@@ -428,10 +387,10 @@ echo $orderNo . str_pad($i, 6, "0", STR_PAD_LEFT);
 			</tr>
 
 			<tr>
-				<td align="center"><b>Nº Palete</b></td>
+				<td align="center"><b>Nï¿½ Palete</b></td>
 				<td align="center"><b>Qtde CX</b></td>
 				<td align="center"><b>Qtde Camadas</b></td>
-				<td align="center"><b>Qtde Peças</b></td>
+				<td align="center"><b>Qtde Peï¿½as</b></td>
 				<td align="center"><b>#</b></td>
 				<td align="center"><b>#</b></td>
 			</tr>      
@@ -479,15 +438,15 @@ echo $orderNo . str_pad($i, 6, "0", STR_PAD_LEFT);
 				
 				<td align="center">
 			  
-			   <!-- Aplica a persistência caso o palete já esteja liberado 
-			        Dois botões invisiveis para acertar o tamanho da linha da tabela-->
+			   <!-- Aplica a persistï¿½ncia caso o palete jï¿½ esteja liberado 
+			        Dois botï¿½es invisiveis para acertar o tamanho da linha da tabela-->
 			   <?php if($connPallet->SearchPalletsDB($conn->getConfirmedNoPallet()[$i]))
 			         {
 			             echo "<button style='visibility: hidden;'>1</button><font color='green'><b>Liberado</b></font><button style='visibility: hidden;'>1</button>";
 			         }elseif(($i+1)<$palletPredictedQuantity)
 			            {?>
 				<div id="liberar<?php echo $i?>">
-				   <!-- Condicionais referentes a comparação de quantidade do que foi previsto com o que foi bipado -->
+				   <!-- Condicionais referentes a comparaï¿½ï¿½o de quantidade do que foi previsto com o que foi bipado -->
 				    <?php 
 				      
 				   
@@ -531,7 +490,7 @@ echo $orderNo . str_pad($i, 6, "0", STR_PAD_LEFT);
 		</table>
 <?php }?>
 	</div>
-    <?php }else{echo "<div class='alert alert-warning'>Ordem de produção não encontrada!</div>";}?>  
+    <?php }else{echo "<div class='alert alert-warning'>Ordem de produï¿½ï¿½o nï¿½o encontrada!</div>";}?>  
     	   
     </body>
 </html>

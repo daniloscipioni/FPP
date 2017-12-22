@@ -47,6 +47,15 @@ if( ($_SESSION['nm_setor'] == 'Quality management') || (trim($_SESSION['nm_setor
 
 <div id="wrapper">
 
+<!-- Ajusta o layout responsivo -->
+<div class="flyout-menu js-flyout-menu">
+
+    <span class="js-project-menu"></span>
+    <span class="js-general-menu"></span>
+    <span class="js-sidebar flyout-menu__sidebar"></span>
+    <span class="js-profile-menu"></span>
+
+</div>
 
 <!-- <div id="wrapper2"> -->
 <!-- <div id="wrapper3"> -->
@@ -60,7 +69,7 @@ if( ($_SESSION['nm_setor'] == 'Quality management') || (trim($_SESSION['nm_setor
 					
 					<li><b> Cracha:  <?php echo $_SESSION['cd_user']?></b>&nbsp;&nbsp;</li>
 					<li><b> Nome:   <?php echo $_SESSION['nm_user']?></b>&nbsp;&nbsp;</li>
-					 <li><b> Setor:   <?php echo $_SESSION['nm_setor']?></b>&nbsp;&nbsp;</li>
+					<li><b> Setor:   <?php echo $_SESSION['nm_setor']?></b>&nbsp;&nbsp;</li>
 					<li><span class="glyphicon glyphicon-lock"></span>&nbsp;<b><?php echo $_SESSION['fpp_desc_permission']?></b>&nbsp;&nbsp;</li>
 					<li><a class="register" href="../br.schott.com.auth/auth-logout.php"> Sair <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></a></li>
 				</ul>
@@ -110,7 +119,7 @@ if( ($_SESSION['nm_setor'] == 'Quality management') || (trim($_SESSION['nm_setor
                <form  id="formSearch" method="post" target="_blank">
                   <label for="order">Ordem de Produção</label>
                   <input type="text" name="txt_search_order" id="txt_search_order" tabindex="1" autofocus="autofocus" maxlength="10">
-                  <input class="btnstyle" type="submit" name="btn_search_order" value="Buscar &#187;" onclick="SearchPido();" tabindex="1" id="btn_search_order">
+                  <input class="btnstyle" type="submit" name="btn_search_order" value="Buscar &#187;" onclick="SearchOpInformation($('#txt_search_order').val());" tabindex="1" id="btn_search_order">
                </form>
          	</div> 
 </div> 

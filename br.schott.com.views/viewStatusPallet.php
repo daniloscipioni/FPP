@@ -1,6 +1,6 @@
 <?php 
 session_start();
-header('Content-type: text/html; charset=ISO-8859-1');
+header('Content-type: text/html; charset=UTF-8');
 
 if (!isset($_SESSION['id_user'])) {
     header("Location: ./br.schott.com.auth/auth-login.php");
@@ -8,13 +8,13 @@ if (!isset($_SESSION['id_user'])) {
 } 
 
 if( ($_SESSION['nm_setor'] == 'Quality management') || (trim($_SESSION['nm_setor']) == 'In-process-control')){
-    $tabName = "LiberaÁ„o Qualidade";
+    $tabName = "Libera√ß√£o Qualidade";
 }elseif ($_SESSION['nm_setor'] == 'Production planning')
 {
-    $tabName = "Impress„o PCP";
+    $tabName = "Impress√£o PCP";
 }elseif ($_SESSION['nm_setor'] == 'Production overhead')
 {
-    $tabName = "Impress„o ADM";
+    $tabName = "Impress√£o ADM";
 }
 
 ?>
@@ -47,19 +47,29 @@ if( ($_SESSION['nm_setor'] == 'Quality management') || (trim($_SESSION['nm_setor
 
 <div id="wrapper">
 
+<!-- Ajusta o layout responsivo -->
+<div class="flyout-menu js-flyout-menu">
 
-<!-- <div id="wrapper2"> -->
-<!-- <div id="wrapper3"> -->
+    <span class="js-project-menu"></span>
+    <span class="js-general-menu"></span>
+    <span class="js-sidebar flyout-menu__sidebar"></span>
+    <span class="js-profile-menu"></span>
+
+</div>
+<!-- <div id="wrapper2">
+<div id="wrapper3"> -->
+
 <div id="top-menu">
     <div id="account">
 				<ul>
 				    <?php if ($_SERVER['SERVER_NAME'] == 'localhost'){
 				    $servidor = "Teste";
-				    } else {$servidor = "ProduÁ„o";}?>
+				    } else {$servidor = "Produ√ß√£o";}?>
 				    <li><b> Servidor:  <?php echo $servidor?></b>&nbsp;&nbsp;</li>
 					
 					<li><b> Cracha:  <?php echo $_SESSION['cd_user']?></b>&nbsp;&nbsp;</li>
 					<li><b> Nome:   <?php echo $_SESSION['nm_user']?></b>&nbsp;&nbsp;</li>
+					<li><b> Setor:   <?php echo $_SESSION['nm_setor']?></b>&nbsp;&nbsp;</li>
 					<li><span class="glyphicon glyphicon-lock"></span>&nbsp;<b><?php echo $_SESSION['fpp_desc_permission']?></b>&nbsp;&nbsp;</li>
 					<li><a class="register" href="../br.schott.com.auth/auth-logout.php"> Sair <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></a></li>
 				</ul>
@@ -103,6 +113,15 @@ if( ($_SESSION['nm_setor'] == 'Quality management') || (trim($_SESSION['nm_setor
 
 
 <script>
+
+var win = null;
+function NovaJanela(pagina,nome,w,h,scroll){
+	LeftPosition = (screen.width) ? (screen.width-w)/2 : 0;
+	TopPosition = (screen.height) ? (screen.height-h)/2 : 0;
+	settings = 'height='+h+',width='+w+',top='+TopPosition+',left='+LeftPosition+',scrollbars='+scroll+',resizable'
+	win = window.open(pagina,nome,settings);
+}
+
 $(document).ready(function() {
 SearchReleasedPallets();
 $("#liberados").focus();
@@ -120,7 +139,7 @@ $("#liberados").focus();
     </div> 
 
 
-
+<a href="viewUpdatePalletRelease.php" onclick="NovaJanela(this.href,'nomeJanela','450','450','yes');return false">Nova Janela de Exemplo</a>
 <!--  INICIO Exibicao do resultado da consulta --> 
 
 				<div id="return_result" align="center"></div>
@@ -144,12 +163,12 @@ $("#liberados").focus();
         Developed by <a href="http://www.schott.com/brazil/portuguese/">Schott Brasil</a> &copy; 2017-2017 Danilo Scipioni
       </div>
       <div class="bgr">
-       	Vers„o 1.0
+       	Vers√£o 1.0
       </div>
    </div>   
 </div>
-<!-- </div> -->
-<!-- </div> -->
+<!--  </div> 
+</div> -->
 
 
 

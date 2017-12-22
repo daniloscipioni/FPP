@@ -1,6 +1,7 @@
 <?php 
 session_start();
-header('Content-type: text/html; charset=ISO-8859-1');
+header('Content-type: text/html; charset=UTF-8');
+
 
 if (!isset($_SESSION['id_user'])) {
     header("Location: ./br.schott.com.auth/auth-login.php");
@@ -8,13 +9,13 @@ if (!isset($_SESSION['id_user'])) {
 } 
 
 if( ($_SESSION['nm_setor'] == 'Quality management') || (trim($_SESSION['nm_setor']) == 'In-process-control')){
-    $tabName = "Liberação Qualidade";
+    $tabName = "LiberaÃ§Ã£o Qualidade";
 }elseif ($_SESSION['nm_setor'] == 'Production planning')
 {
-    $tabName = "Impressão PCP";
+    $tabName = "ImpressÃ£o PCP";
 }elseif ($_SESSION['nm_setor'] == 'Production overhead')
 {
-    $tabName = "Impressão ADM";
+    $tabName = "ImpressÃ£o ADM";
 }
 
 
@@ -47,6 +48,15 @@ if( ($_SESSION['nm_setor'] == 'Quality management') || (trim($_SESSION['nm_setor
 
 <div id="wrapper">
 
+<!-- Ajusta o layout responsivo -->
+<div class="flyout-menu js-flyout-menu">
+
+    <span class="js-project-menu"></span>
+    <span class="js-general-menu"></span>
+    <span class="js-sidebar flyout-menu__sidebar"></span>
+    <span class="js-profile-menu"></span>
+
+</div>
 
 <!-- <div id="wrapper2"> -->
 <!-- <div id="wrapper3"> -->
@@ -55,7 +65,7 @@ if( ($_SESSION['nm_setor'] == 'Quality management') || (trim($_SESSION['nm_setor
 				<ul>
 				    <?php if ($_SERVER['SERVER_NAME'] == 'localhost'){
 				    $servidor = "Teste";
-				    } else {$servidor = "ProduÃ§Ã£o";}?>
+				    } else {$servidor = "Produï¿½ï¿½o";}?>
 				    <li><b> Servidor:  <?php echo $servidor?></b>&nbsp;&nbsp;</li>
 					
 					<li><b> Cracha:  <?php echo $_SESSION['cd_user']?></b>&nbsp;&nbsp;</li>
@@ -105,7 +115,7 @@ if( ($_SESSION['nm_setor'] == 'Quality management') || (trim($_SESSION['nm_setor
 <div id="cancel-order"> 
             <div id="login-form"> 
                <form  id="formCancel" method="post" target="_blank">
-                  <label for="order">Ordem de Produção</label>
+                  <label for="order">Ordem de ProduÃ§Ã£o</label>
                   <input type="text" name="txt_cancel_order" id="txt_cancel_order" tabindex="1" autofocus="autofocus" maxlength="10">
                   <input class="btnstyle" type="submit" name="btn_cancel_order" value="Cancelar &Chi;" onclick="CancelOrder($('#txt_cancel_order').val());" tabindex="1" id="btn_cancel_order">
                </form>
@@ -137,7 +147,7 @@ if( ($_SESSION['nm_setor'] == 'Quality management') || (trim($_SESSION['nm_setor
         Developed by <a href="http://www.schott.com/brazil/portuguese/">Schott Brasil</a> &copy; 2017-2017 Danilo Scipioni
       </div>
       <div class="bgr">
-       	Versão 1.0
+       	Versï¿½o 1.0
       </div>
   </div>
 </div>
